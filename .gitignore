@@ -1,0 +1,7 @@
+common/*
+Sip/10-common/*
+Sip/t5-neith/AppFrame/*
+Sip/t5-neith/duilib/*
+Sip/t5-neith/SipTool/prj_win32/SipTool.sdf
+touch/prj_win32/touch.sdf
+
