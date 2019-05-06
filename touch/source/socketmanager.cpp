@@ -91,6 +91,12 @@ void CSocketManager::OpenSocket()
     UINT nNetTimeout = 3000;//超时时间 3s
     setsockopt(m_sClient, SOL_SOCKET, SO_SNDTIMEO, (char *)&nNetTimeout,sizeof(int));
     setsockopt(m_sClient, SOL_SOCKET, SO_RCVTIMEO, (char *)&nNetTimeout, sizeof(int));
+    // 设置缓冲区长度
+    UINT nRcvBuf = 2000000;
+    setsockopt(m_sClient, SOL_SOCKET, SO_SNDBUF,(char*)&nRcvBuf, sizeof(UINT));
+    // 允许地址重用
+    BOOL bReuseaddr=TRUE;
+    setsockopt(m_sClient, SOL_SOCKET ,SO_REUSEADDR,(const char*)&bReuseaddr,sizeof(BOOL));
 
     // 设置为非阻塞的socket  
     int iMode = 1;  
@@ -121,7 +127,7 @@ void CSocketManager::OpenSocket()
         }  
         else  
         {  
-            int error = -1;  
+            int error = -1;
             int optLen = sizeof(int);  
             getsockopt(m_sClient, SOL_SOCKET, SO_ERROR, (char*)&error, &optLen);   
             // 之所以下面的程序不写成三目运算符的形式， 是为了更直观， 便于注释  

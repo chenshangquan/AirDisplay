@@ -26,8 +26,9 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <WholeProgramOptimization>false</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
+    <UseOfMfc>Dynamic</UseOfMfc>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -51,7 +52,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\..\..\10-common\include\platform;..\..\..\10-common\include\tp;..\..\duilib;..\..\..\10-common\include\system1;..\..\common_2010\include;..\..\AppFrame\include;..\..\..\10-common\include\nms1;..\..\common_2010\common-header;..\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\..\10-common\include\protocol;..\..\..\10-common\include\platform;..\..\..\10-common\include\tp;..\..\duilib;..\..\..\10-common\include\system1;..\..\common_2010\include;..\..\AppFrame\include;..\..\..\10-common\include\nms1;..\..\common_2010\common-header;..\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -69,23 +70,29 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>..\include;..\..\common_2010\common-header;..\..\..\10-common\include\nms1;..\..\AppFrame\include;..\..\common_2010\include;..\..\..\10-common\include\system1;..\..\duilib;..\..\..\10-common\include\tp;..\..\..\10-common\include\platform;..\..\..\10-common\include\protocol;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalLibraryDirectories>..\..\..\10-common\lib\release\win32_2010;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\include\constdef.h" />
+    <ClInclude Include="..\include\Decoder.h" />
     <ClInclude Include="..\include\globalheader.h" />
     <ClInclude Include="..\include\menulogic.h" />
+    <ClInclude Include="..\include\messageboxlogic.h" />
     <ClInclude Include="..\include\networksetuplogic.h" />
     <ClInclude Include="..\include\siptoolcommonop.h" />
     <ClInclude Include="..\include\siptoolinterface.h" />
     <ClInclude Include="..\include\siptoolmsgmanager.h" />
     <ClInclude Include="..\include\system.h" />
+    <ClInclude Include="..\include\videologic.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="siptool.h" />
     <ClInclude Include="siptoolDlg.h" />
@@ -93,13 +100,16 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\source\Decoder.cpp" />
     <ClCompile Include="..\source\menulogic.cpp" />
+    <ClCompile Include="..\source\messageboxlogic.cpp" />
     <ClCompile Include="..\source\networksetuplogic.cpp" />
     <ClCompile Include="..\source\siptoolcommonop.cpp" />
     <ClCompile Include="..\source\siptoolinterface.cpp" />
     <ClCompile Include="..\source\siptoolmsgmanager.cpp" />
     <ClCompile Include="..\source\siptoolsysctrlif.cpp" />
     <ClCompile Include="..\source\system.cpp" />
+    <ClCompile Include="..\source\videologic.cpp" />
     <ClCompile Include="siptool.cpp" />
     <ClCompile Include="siptoolDlg.cpp" />
     <ClCompile Include="stdafx.cpp">

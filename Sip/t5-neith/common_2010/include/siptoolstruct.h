@@ -6,6 +6,7 @@
 
 #include "siptoolconst.h"
 #include "siptoolmessage.h"
+#include "tpcommonstruct.h"
 
 //µÇÂ¼ÐÅÏ¢
 typedef struct tagLoginInfo

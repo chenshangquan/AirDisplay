@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="gb2312"?>
+<Window sizebox="0,0,0,0" caption="0,0,0,418" size="618,418" mininfo="618,418"  maxinfo="618,418" bktrans="true">
+    <Font name="微软雅黑" size="25" bold="false" default="true"  />
+    <Font name="微软雅黑" size="18" bold="false"></Font>
+	<Default name="Button" value="gdiplus=&quot;true&quot; textcolor=&quot;#CCD4DEEB&quot; pushedtextcolor=&quot;#FF379FDB&quot;" />
+  <HorizontalLayout name="MessageBoxLayout" bkimage="res/public/messagebox.png" inset="0,0,0,0">  
+	<VerticalLayout float="true" pos="100,0,518,300">
+	<Label name="LabelTip" text="确认此操作？" height="300" textcolor="#CCFFFFFF" align="center" font="0" gdiplus="true"/>
+	</VerticalLayout>
+	<HorizontalLayout float="true" pos="150,300,468,364">
+	<Control />
+	<Button name="BtnOk" width="149" height="64" font="1" text="确  定" textcolor="#CCD4DEEB" normalimage="res\public\twoletterbtn_normal.png" hotimage="res\public\twoletterbtn_down.png" pushedimage="res\public\twoletterbtn_down.png"   align="center"  gdiplus="true"/>
+	<Button name="BtnCancel" width="149" height="64" font="1" padding="20,0,0,0" text="取  消" textcolor="#CCD4DEEB" normalimage="res\public\twoletterbtn_normal.png" hotimage="res\public\twoletterbtn_down.png" pushedimage="res\public\twoletterbtn_down.png"   align="center" visible="false" gdiplus="true"/>
+	<Control />
+	</HorizontalLayout>
+  </HorizontalLayout>
+ </Window>

@@ -73,53 +73,6 @@ bool CMenuLogic::OnCloseBtnClicked(TNotifyUI& msg)
     return false;
 }
 
-// 判断IP字符串的合法性;
-bool IsIpFormatRight(LPCTSTR pIpAddr)
-{
-    u32 dwCount = 0;
-    s32 i = 0;
-    u32 dwA, dwB, dwC, dwD;
-
-    // 检查是否只包含点和数字;
-    for(i = 0; pIpAddr[i] != '\0'; i++)
-    {
-        if (pIpAddr[i] > 256)
-        {
-            return FALSE;
-        }
-
-        if(!isdigit((int)pIpAddr[i]) && pIpAddr[i] != '.')
-        {
-            return FALSE;
-        }
-    }
-
-    // 检查形式是否为X.X.X.X;
-    for (i = 0; pIpAddr[i+1] != '\0'; i++)
-    {
-        if (isdigit(pIpAddr[i]) && pIpAddr[i+1] == '.')
-        {
-            dwCount++;
-        }
-    }
-    if (dwCount != 3)
-    {
-        return FALSE;
-    }
-
-    // 检查区间的合法性;
-    if ((swscanf(pIpAddr, L"%d.%d.%d.%d", &dwA, &dwB, &dwC, &dwD) == 4)
-        &&(dwA >= 0 && dwA <= 255)
-        &&(dwB >= 0 && dwB <= 255)
-        &&(dwC >= 0 && dwC <= 255)
-        &&(dwD >= 0 && dwD <= 255))
-    {
-        return TRUE;
-    }
-
-    return FALSE;
-}
-
 bool CMenuLogic::OnLoginBtnClicked(TNotifyUI& msg)
 {
     CString strIP =(ISipToolCommonOp::GetControlText( m_pm ,_T("edtIP"))).c_str();

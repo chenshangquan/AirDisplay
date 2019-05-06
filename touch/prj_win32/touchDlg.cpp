@@ -37,6 +37,7 @@ HWND g_hVolumeCtrlDlg = NULL;
 GUID g_guidMyContext = GUID_NULL;
 CAudioEndpointVolumeCallback EPVolEvents;
 IAudioEndpointVolume* g_pEndptVol = NULL;
+u8 *g_pVideobuf = NULL;
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -64,7 +65,6 @@ void CapScreenVidStart( void *pFrame, u32 dwContext )
     static u32 dwVFrameId = 0;
     //缓存音视频数据
     //u8 *pVideobuf = new u8[RECVVIDEOBUF_LENGTH];
-    u8 achVideobuf[RECVVIDEOBUF_LENGTH] = {0};
 
 	FRAMEHDR stFrameHdr = *(PFRAMEHDR)pFrame;//获得的码流是结构体FRAMEHDR
 
@@ -85,14 +85,14 @@ void CapScreenVidStart( void *pFrame, u32 dwContext )
     stFrameHdr.m_dwFrameID = ++dwVFrameId;
     //stFrameHdr.m_dwSSRC = g_sdwVideoSsrc;  //同步源，用于接收端
 
-    memset( achVideobuf, 0, RECVVIDEOBUF_LENGTH );
-    memcpy( achVideobuf, &stFrameHdr, STRUCT_FRAMEHDR_LENGTH );
-    memcpy( achVideobuf+STRUCT_FRAMEHDR_LENGTH, stFrameHdr.m_pData, stFrameHdr.m_dwDataSize);
+    memset( g_pVideobuf, 0, RECVVIDEOBUF_LENGTH );
+    memcpy( g_pVideobuf, &stFrameHdr, STRUCT_FRAMEHDR_LENGTH );
+    memcpy( g_pVideobuf+STRUCT_FRAMEHDR_LENGTH, stFrameHdr.m_pData, stFrameHdr.m_dwDataSize);
 
     //发送视频码流至IMIX侧
     if (g_dlg->m_bIsProjecting)
     {
-        SOCKETWORK->SendDataPack(&achVideobuf[0], STRUCT_FRAMEHDR_LENGTH+stFrameHdr.m_dwDataSize);
+        SOCKETWORK->SendDataPack(g_pVideobuf, STRUCT_FRAMEHDR_LENGTH+stFrameHdr.m_dwDataSize);
     }
 
 	g_dlg->m_bDataBlock = false;
@@ -101,23 +101,23 @@ void CapScreenVidStart( void *pFrame, u32 dwContext )
 //音频编码回调
 void CapScreenAudStart( void *pFrame, u32 dwContext )
 {	
-    static u32 dwAFrameId = 0;
-    u8 achAudiobuf[RECVAUDIOBUF_LENGTH] = {0};
+ //   static u32 dwAFrameId = 0;
+ //   u8 achAudiobuf[RECVAUDIOBUF_LENGTH] = {0};
 
-	FRAMEHDR stFrameHdr = *(PFRAMEHDR)pFrame;//获得的码流是结构体FRAMEHDR
+	//FRAMEHDR stFrameHdr = *(PFRAMEHDR)pFrame;//获得的码流是结构体FRAMEHDR
 
-    stFrameHdr.m_dwFrameID = ++dwAFrameId;
-    //stFrameHdr.m_dwSSRC = g_sdwAudioSsrc;  //同步源，用于接收端
+ //   stFrameHdr.m_dwFrameID = ++dwAFrameId;
+ //   //stFrameHdr.m_dwSSRC = g_sdwAudioSsrc;  //同步源，用于接收端
 
-    memset( achAudiobuf, 0, RECVVIDEOBUF_LENGTH );
-    memcpy( achAudiobuf, &stFrameHdr, STRUCT_FRAMEHDR_LENGTH );
-    memcpy( achAudiobuf+STRUCT_FRAMEHDR_LENGTH, stFrameHdr.m_pData, stFrameHdr.m_dwDataSize);
+ //   memset( achAudiobuf, 0, RECVVIDEOBUF_LENGTH );
+ //   memcpy( achAudiobuf, &stFrameHdr, STRUCT_FRAMEHDR_LENGTH );
+ //   memcpy( achAudiobuf+STRUCT_FRAMEHDR_LENGTH, stFrameHdr.m_pData, stFrameHdr.m_dwDataSize);
 
-    //发送音频码流至IMIX侧
-    if (g_dlg->m_bIsProjecting)
-    {
-        SOCKETWORK->SendDataPack(&achAudiobuf[0], STRUCT_FRAMEHDR_LENGTH+stFrameHdr.m_dwDataSize);
-    }
+ //   //发送音频码流至IMIX侧
+ //   if (g_dlg->m_bIsProjecting)
+ //   {
+ //       SOCKETWORK->SendDataPack(&achAudiobuf[0], STRUCT_FRAMEHDR_LENGTH+stFrameHdr.m_dwDataSize);
+ //   }
 }
 
 //UINT ThreadSendViedoData(LPVOID pParam)
@@ -1959,18 +1959,13 @@ void CtouchDlg::SolveReadInfo(BYTE* recvDataBuf)
 
 void CtouchDlg::StartProjectScreen()
 {
-	if (!m_bHidOpen)
-	{
-		return;
-	}
-
-	if ( m_bVideoThreadRun || m_bAudioThreadRun )
+	/*if ( m_bVideoThreadRun || m_bAudioThreadRun )
 	{
 		PRINTMSG_TIME("m_bVideoThreadRun:%d,m_bAudioThreadRun:%d\r\n", m_bVideoThreadRun, m_bAudioThreadRun);
         BOOL32 bViewQKShare = FALSE;
         OspPost(MAKEIID(AID_AIRDIS_APP,0), EV_NVMPAPP_VIEWQKSHARE_Cmd, &bViewQKShare, sizeof(BOOL32));
 		return;
-	}
+	}*/
 
 	if (!m_bIsProjecting)
 	{
@@ -2007,6 +2002,7 @@ void CtouchDlg::StartProjectScreen()
 			InitVideoEncoderParam(MEDIA_TYPE_H264);//视频分辨率可能会人为改变，需要重新初始化
 		}
 
+        g_pVideobuf = new u8[RECVVIDEOBUF_LENGTH];
 		OnStartScreenCatch();
 	}
 	else
@@ -2017,11 +2013,6 @@ void CtouchDlg::StartProjectScreen()
 
 void CtouchDlg::StopProjectScreen(bool bNotifyHid)
 {
-	if (!m_bHidOpen)
-	{
-		return;
-	}
-
 	if (m_bIsProjecting)
 	{
 		//取消默认音频设备
@@ -2035,11 +2026,15 @@ void CtouchDlg::StopProjectScreen(bool bNotifyHid)
 
 		OnStopScreenCatch();
 
+        SOCKETWORK->CloseSocket();
+        delete g_pVideobuf;
+        g_pVideobuf = NULL;
+
 		//通知usb-hid设备停止投屏消息
 		if (bNotifyHid)
 		{
             BOOL32 bViewQKShare = FALSE;
-            OspPost(MAKEIID(AID_AIRDIS_APP,0), EV_NVMPAPP_VIEWQKSHARE_Cmd, &bViewQKShare, sizeof(BOOL32));
+            OspPost(MAKEIID(AID_SIPTOOL_APP,0), EV_NVMPAPP_VIEWQKSHARE_Cmd, &bViewQKShare, sizeof(BOOL32), m_pcMainDlg->GetNodeId(), MAKEIID(AID_AIRDIS_APP, 0));
 	    }
 	}
 }

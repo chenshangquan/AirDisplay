@@ -38,7 +38,7 @@ void CSipToolSysCtrl::OnRegister(const CMessage& cMsg)
     SOCKETWORK->SetSocketIP(_T("172.16.160.113"));
     SOCKETWORK->SetSocketPort((u32)6684);
 
-    SOCKETWORK->OpenSocket();
+    //SOCKETWORK->OpenSocket();
     PrtSipToolMsg("set socket ip&port success.\r\n");
     CSipToolMsgDriver::s_pMsgDriver->SetNodeId(cMsg.srcnode);
     CSipToolMsgDriver::s_pMsgDriver->PostCMsg(EV_NVMPAPP_REGISTER_RSP, NULL, 0);
@@ -50,8 +50,18 @@ void CSipToolSysCtrl::OnStartViewShare(const CMessage& cMsg)
     BOOL32 bTPStart = (BOOL32)cMsg.content;
     if (bTPStart)
     {
+        PrtSipToolMsg("start view share.\r\n");
+        SOCKETWORK->OpenSocket();
         u32 dwSerPort = SOCKETWORK->GetSocket();
         CSipToolMsgDriver::s_pMsgDriver->PostCMsg(EV_NVMPAPP_IMIX_SOCKET_LISTEN_Ntf, &dwSerPort, sizeof(u32));
+    }
+    else
+    {
+        if ( SOCKETWORK->IsSocket() )
+        {
+            PrtSipToolMsg("stop view share.\r\n");
+            SOCKETWORK->CloseSocket();
+        }
     }
 }
 

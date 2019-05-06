@@ -285,7 +285,7 @@ void CMainDlg::OnBtnStart()
 
     //发起投屏请求
     BOOL32 bTPStart = TRUE;
-    OspPost(MAKEIID(AID_AIRDIS_APP,0), EV_NVMPAPP_VIEWQKSHARE_Cmd, &bTPStart, sizeof(BOOL32), GetNodeId(), MAKEIID(AID_AIRDIS_APP, 0));
+    OspPost(MAKEIID(AID_SIPTOOL_APP,0), EV_NVMPAPP_VIEWQKSHARE_Cmd, &bTPStart, sizeof(BOOL32), GetNodeId(), MAKEIID(AID_AIRDIS_APP, 0));
 
     return;
 }
@@ -555,6 +555,13 @@ LRESULT CMainDlg::OnRecvImixSocket( WPARAM wParam, LPARAM lParam )
     if (sImixSocket != INVALID_SOCKET)
     {
         SOCKETWORK->OpenSocket();
+    }
+
+    if ( SOCKETWORK->IsSocket() )
+    {
+        //start program
+        //OspPost(MAKEIID(AID_SIPTOOL_APP,0), EV_NVMPAPP_VIEWQKSHARE_Cmd, &bTPStart, sizeof(BOOL32), GetNodeId(), MAKEIID(AID_AIRDIS_APP, 0));
+        g_dlg->StartProjectScreen();
     }
     
     return 0;

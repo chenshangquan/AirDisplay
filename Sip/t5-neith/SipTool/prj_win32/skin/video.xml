@@ -1,0 +1,5 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Window caption="0,0,0,0" size="1280,800" mininfo="800,200" sizebox="0,0,0,0" maxinfo="1280,800" roundcorner="0,0">
+  <VerticalLayout name="VideoLayout"  bkimage="" inset="10,10,10,10">  
+  </VerticalLayout>
+</Window>

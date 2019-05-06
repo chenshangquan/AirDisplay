@@ -86,19 +86,57 @@ DWORD WINAPI Rcv( LPVOID lpParam )
 {
     SOCKET sClient = *(SOCKET*)lpParam;
     int retVal;
-    char bufRecv[2000000];
-    memset( bufRecv, 0, sizeof( bufRecv ) );
+    u8 *pRecvbuf = new u8[2000000];
+    memset( pRecvbuf, 0, 2000000 );
     while(1)
     {
-        retVal = recv( sClient, bufRecv, 2000000, 0 );
+        retVal = recv( sClient, (char *)pRecvbuf, 2000000, 0 );
         if ( retVal == SOCKET_ERROR ) {
-            //printf( "recive faild!\n" );
+            PrtSipToolMsg( "recv failed!\r\n" );
             break;
         } else {
-            //printf( "收到客户端消息：%s\n", bufRecv );
+            PrtSipToolMsg( "recv message from touch\r\n" );
         }
     }
+
+    delete pRecvbuf;
+    pRecvbuf = NULL;
+
     return 0;
+}
+UINT ThreadAccept(LPVOID pParam)
+{
+    CSocketManager *pThis = (CSocketManager*)pParam;
+    if (!pThis)
+    {
+        return -1;
+    }
+
+    sockaddr_in cliAddr;
+    SOCKET CliSocket;
+    int dwCliAddrLen = sizeof(cliAddr);
+    while (1)
+    {
+        CliSocket = accept(pThis->GetSocket(), (SOCKADDR FAR*)&cliAddr, &dwCliAddrLen);
+        if(CliSocket == INVALID_SOCKET)
+        {
+            CSipToolPrintCtrl::GetPrintCtrl()->PrintMsg("accept error\n");
+            continue; //继续等待下一次连接
+        }
+        else
+        {
+            HANDLE hThread2;
+            DWORD dwThreadId2;
+
+            //hThread1 = ::CreateThread(NULL, NULL, Snd, (LPVOID*)&sClient, 0, &dwThreadId1);
+            hThread2 = ::CreateThread(NULL, NULL, Rcv, (LPVOID*)&CliSocket, 0, &dwThreadId2);
+
+            //::WaitForSingleObject(hThread1, INFINITE);
+            ::WaitForSingleObject(hThread2, INFINITE);
+            //::CloseHandle(hThread1);
+            ::CloseHandle(hThread2);
+        }
+    }
 }
 
 void CSocketManager::OpenSocket()
@@ -109,14 +147,20 @@ void CSocketManager::OpenSocket()
         CSipToolPrintCtrl::GetPrintCtrl()->PrintMsg("Socket creation error.\r\n");
         return;
     }
-    //设置发送接受超时
+    // 设置发送接受超时
     UINT nNetTimeout = 3000;//超时时间 3s
     setsockopt(m_sServer, SOL_SOCKET, SO_SNDTIMEO, (char *)&nNetTimeout,sizeof(int));
     setsockopt(m_sServer, SOL_SOCKET, SO_RCVTIMEO, (char *)&nNetTimeout, sizeof(int));
+    // 设置缓冲区长度
+    UINT nRcvBuf = 2000000;
+    setsockopt(m_sServer, SOL_SOCKET, SO_SNDBUF,(char*)&nRcvBuf, sizeof(UINT));
+    // 允许地址重用
+    BOOL bReuseaddr=TRUE;
+    setsockopt(m_sServer, SOL_SOCKET ,SO_REUSEADDR,(const char*)&bReuseaddr,sizeof(BOOL));
 
     // 设置为非阻塞的socket  
-    int iMode = 1;  
-    ioctlsocket(m_sServer, FIONBIO, (u_long FAR*)&iMode);
+    /*int iMode = 1;  
+    ioctlsocket(m_sServer, FIONBIO, (u_long FAR*)&iMode);*/
 
     sockaddr_in serAddr;
     serAddr.sin_family = AF_INET;
@@ -143,57 +187,11 @@ void CSocketManager::OpenSocket()
 
     m_bIsSocketOpen = true;
 
-    sockaddr_in cliAddr;
-    int dwCliAddrLen = sizeof(cliAddr);
-    //while (1)
-    {
-        m_sClient = accept(m_sServer, (SOCKADDR FAR*)&cliAddr, &dwCliAddrLen);
-        if(m_sClient == INVALID_SOCKET)
-        {
-            CSipToolPrintCtrl::GetPrintCtrl()->PrintMsg("accept error\n");
-            //continue; //继续等待下一次连接
-        }
-        else
-        {
-#if 0
-            u8 achVideobuf[1000] = {0};            
-            while (1)
-            {
-                int ret = recv(m_sClient, (char *)achVideobuf, 1000, 0);
-                if(ret > 0)
-                {
-                    //TODO
-                }
-                else if(ret == 0)
-                {
-                    CSipToolPrintCtrl::GetPrintCtrl()->PrintMsg("lost connection , Ip = %s\n", inet_ntoa(cliAddr.sin_addr));
-                    break;
-                }
-                else//ret < 0
-                {
-                    CSipToolPrintCtrl::GetPrintCtrl()->PrintMsg("something wrong of %s\n", inet_ntoa(cliAddr.sin_addr));
-                    CloseSocket();
-                    break;  
-                }
-            }
-#else
-            HANDLE hThread1, hThread2;
-            DWORD dwThreadId1, dwThreadId2;
-
-            //hThread1 = ::CreateThread(NULL, NULL, Snd, (LPVOID*)&sClient, 0, &dwThreadId1);
-            hThread2 = ::CreateThread(NULL, NULL, Rcv, (LPVOID*)&m_sClient, 0, &dwThreadId2);
-
-            //::WaitForSingleObject(hThread1, INFINITE);
-            ::WaitForSingleObject(hThread2, INFINITE);
-            //::CloseHandle(hThread1);
-            ::CloseHandle(hThread2);
-#endif
-        }
-    }
+    AfxBeginThread(ThreadAccept, this);
 
     // 设回为阻塞socket  
-    iMode = 0;  
-    ioctlsocket(m_sServer, FIONBIO, (u_long FAR*)&iMode); //设置为阻塞模式
+    //iMode = 0;  
+    //ioctlsocket(m_sServer, FIONBIO, (u_long FAR*)&iMode); //设置为阻塞模式
 
     return;
 }

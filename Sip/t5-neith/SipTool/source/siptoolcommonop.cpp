@@ -1,6 +1,8 @@
 #include "StdAfx.h"
 #include "siptoolcommonop.h"
 #include "networksetuplogic.h"
+#include "videologic.h"
+#include "messageboxlogic.h"
 
 #include "menulogic.h"
 
@@ -18,6 +20,8 @@ void ISipToolCommonOp::RegLogics()
 {
     REG_LOGIC(CMenuLogic);
 	REG_LOGIC(CNetworkSetupLogic);
+    REG_LOGIC(CVideoLogic);
+    REG_LOGIC(CMessageBoxLogic);
 
 	return ;
 }

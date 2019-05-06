@@ -3,4 +3,6 @@
 <!--index下配置窗口索引 file-窗口对应xml文件   logic-窗口逻辑类名  parent-父窗口名  style(frame|dialog|child)风格,默认frame-->
   <siptool file="menu.xml" logic="CMenuLogic|CNetworkSetupLogic" style="frame" />
   <!--networksetup file="networksetup.xml" logic="CNetworkSetupLogic" parent="siptool" style="dialog" /-->
+  <MessageBoxDlg file="messagebox.xml" logic="CMessageBoxLogic" parent="siptool" style="dialog" /> 
+  <VideoWindow file="video.xml" logic="CVideoLogic" parent="siptool" style="dialog" />
 </index>
