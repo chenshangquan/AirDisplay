@@ -36,7 +36,7 @@ protected:
 	bool OnDisconnect(WPARAM wParam, LPARAM lParam, bool& bHandle);
 	
 	//Ë«Á÷ÏìÓ¦
-	bool OnShowVideo(WPARAM wParam, LPARAM lParam, bool& bHandle);
+    bool OnShowVideo(WPARAM wParam, LPARAM lParam, bool& bHandle);
 	bool HideDualView();
 	void RestoreVedioWnd();
 	bool OnDualRecvStateNotify(WPARAM wParam, LPARAM lParam, bool& bHandle);

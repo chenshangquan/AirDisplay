@@ -10,13 +10,14 @@ APP_BEGIN_MSG_MAP(CVideoLogic,CNotifyUIImpl)
 
 	MSG_CREATEWINDOW(_T("VideoLayout"), OnCreate)
 	MSG_INIWINDOW(_T("VideoLayout"), OnInit)
-	MSG_DBCLICK(_T("VideoLayout"), OnHideVideo)
+	//MSG_DBCLICK(_T("VideoLayout"), OnHideVideo)
 
     /*USER_MSG(WM_CMS_SHOWVIDEO,OnShowVideo)
     USER_MSG(UI_CNS_RECV_DUAL_NOTIFY,OnDualRecvStateNotify)
     USER_MSG(UI_CNSINS_START_DUALCODESTREAM_RSP,OnStartRsp)
     USER_MSG(UI_CNS_DUAL_KEY_NOTIFY,OnDualCodeEnCryptKeyNty)
     USER_MSG(UI_CNS_DISCONNECTED,OnDisconnect)*/
+    USER_MSG(UI_SIPTOOL_SHOWVIDEO, OnShowVideo)
 APP_END_MSG_MAP()
 
 
@@ -81,7 +82,7 @@ bool CVideoLogic::OnHideVideo(TNotifyUI& msg)
 
 bool CVideoLogic::OnShowVideo(WPARAM wParam, LPARAM lParam, bool& bHandle)
 {
-	if ( m_bDecod && m_bRecvStream )
+	/*if ( m_bDecod && m_bRecvStream )
 	{
 		bool bVis = WINDOW_MGR_PTR->IsWindowVisible(g_stcStrVideoDlg.c_str());
 		if ( bVis )
@@ -103,7 +104,11 @@ bool CVideoLogic::OnShowVideo(WPARAM wParam, LPARAM lParam, bool& bHandle)
 	else
 	{             
 		PlayDual();
-	}
+	}*/
+    PlayDual();
+
+    RestoreVedioWnd( );
+    m_cDecoder.StartPlay(); 
 
 	return S_OK;
 }
@@ -135,9 +140,9 @@ void CVideoLogic::RestoreVedioWnd()
 	} 
 
 	//切换大小时请求关键帧，防止白屏 -2014.3.4 xcr
-	m_cDecoder.AskKeyFrame( TRUE );
+	//m_cDecoder.AskKeyFrame( TRUE );
 
-	WINDOW_MGR_PTR->ShowWindow(g_stcStrVideoDlg.c_str());
+	WINDOW_MGR_PTR->ShowWindowCenter(g_stcStrVideoDlg.c_str());
 }
 
 bool CVideoLogic::OnDualRecvStateNotify(WPARAM wParam, LPARAM lParam, bool& bHandle)
@@ -392,25 +397,26 @@ void CVideoLogic::InitParam()
 
     m_cDecoder.SetVidDecZoomPolicy(EN_ZOOM_SCALE); //EN_ZOOM_CUT是全屏显示
 
-	TNetRSParam tNetRSParam;
-	tNetRSParam.m_wFirstTimeSpan = 40;
-	tNetRSParam.m_wSecondTimeSpan = 0 /*80*/;  //第二个重传检测点
-	tNetRSParam.m_wThirdTimeSpan = 0 /*120*/;   //第三个重传检测点
-	tNetRSParam.m_wRejectTimeSpan = 2000;  //过期丢弃的时间跨度
-	m_cDecoder.SetNetFeedbackVideoParam( /*tNetRSParam,*/ TRUE );
-	m_cDecoder.SetNetFeedbackAudioParam( /*tNetRSParam,*/ TRUE );
+	//TNetRSParam tNetRSParam;
+	//tNetRSParam.m_wFirstTimeSpan = 40;
+	//tNetRSParam.m_wSecondTimeSpan = 0 /*80*/;  //第二个重传检测点
+	//tNetRSParam.m_wThirdTimeSpan = 0 /*120*/;   //第三个重传检测点
+	//tNetRSParam.m_wRejectTimeSpan = 2000;  //过期丢弃的时间跨度
+	//m_cDecoder.SetNetFeedbackVideoParam( /*tNetRSParam,*/ TRUE );
+	//m_cDecoder.SetNetFeedbackAudioParam( /*tNetRSParam,*/ TRUE );
 
-	u32 dwLocalIP = 0;
+	u32 dwLocalIP = inet_addr("172.16.160.113");
+    dwLocalIP = (ntohl)(dwLocalIP);
 	////ComInterface->GetLocalIP( dwLocalIP ); 
 
 #define RTP_LOCALVIDEO_PORT 10000
 	//2012.9.27  避免该端口已经被其他程序占用而导致无法正常接收到音视频码流问题  by yujinjin
 	////u16 wVedioPort = GetIdlePort( dwLocalIP,RTP_LOCALVIDEO_PORT, RTP_LOCALVIDEO_PORT + 100 );
 	////u16 wAudioPort = GetIdlePort( dwLocalIP,wVedioPort +2 , RTP_LOCALVIDEO_PORT + 200 );
-    u16 wVedioPort = 10000;
-    u16 wAudioPort = 10200;
+    u16 wVedioPort = 7000;
+    u16 wAudioPort = 7200;
 
-	m_tVedioIpTransAddr.m_tRtpPort.m_dwIP = htonl(dwLocalIP);
+    m_tVedioIpTransAddr.m_tRtpPort.m_dwIP = htonl(dwLocalIP);
 	m_tVedioIpTransAddr.m_tRtpPort.m_wPort =  wVedioPort  ;
 
 
@@ -431,11 +437,13 @@ void CVideoLogic::InitParam()
 
 	m_cDecoder.SetVideoParam(tMonitorParam);
 
+    // 音频解码参数
 	TAudAACParam tAACParam;
 	tAACParam.dwChannel = 1;
 	tAACParam.dwSamplePerSecond = 32000;
 	m_cDecoder.SetAACParam(tAACParam);
-	m_cDecoder.SetNetRcvParam();
+
+	m_cDecoder.SetNetRcvParam();        //设置音视频网络接收参数
 
 	if ( 0 != m_tTpEncryptKey.byLen )
 	{

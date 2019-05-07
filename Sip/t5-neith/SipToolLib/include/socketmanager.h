@@ -47,6 +47,7 @@ public:
     //u32                         m_evWaitMsg;    //等待回复的消息
 
     static bool                 m_bIsSocketOpen;
+    HANDLE  m_hRcvThread;      //接收线程句柄
 protected:
     CRITICAL_SECTION            m_csMsgLock;    //消息发送临界锁
 private:

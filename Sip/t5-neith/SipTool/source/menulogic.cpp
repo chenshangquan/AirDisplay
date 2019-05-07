@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "menulogic.h"
 #include "networksetuplogic.h"
+#include "videologic.h"
 
 #define TIMER_LENGTH  4000
 #define TIMER_SHOWTIP 200
@@ -51,6 +52,8 @@ bool CMenuLogic::OnCreate( TNotifyUI& msg )
 bool CMenuLogic::OnInit( TNotifyUI& msg )
 {
     REG_RCKTOOL_MSG_WND_OB(m_pm->GetPaintWindow());
+
+    WINDOW_MGR_PTR->ShowWindow( g_stcStrVideoDlg.c_str(), false );
     return true;
 }
 
@@ -75,31 +78,7 @@ bool CMenuLogic::OnCloseBtnClicked(TNotifyUI& msg)
 
 bool CMenuLogic::OnLoginBtnClicked(TNotifyUI& msg)
 {
-    CString strIP =(ISipToolCommonOp::GetControlText( m_pm ,_T("edtIP"))).c_str();
-    CString strUserName = (ISipToolCommonOp::GetControlText( m_pm ,_T("edtUserName"))).c_str();
-    CString strPassWord = (ISipToolCommonOp::GetControlText( m_pm ,_T("edtPassWord"))).c_str();
-
-    /*if( !IsIpFormatRight(strIP) )
-    {
-        ShowTip(_T("·þÎñÆ÷µØÖ··Ç·¨"));
-        return false;
-    }
-    if (strUserName.IsEmpty())
-    {
-        ShowTip(_T("ÇëÊäÈëÕËºÅ¡¢ÃÜÂë"));
-        return false;
-    }
-    if(strPassWord.IsEmpty())
-    {
-        ShowTip(_T("ÇëÊäÈëÕËºÅ¡¢ÃÜÂë"));
-        return false;
-    }*/
-
-    u32 dwIp = ntohl( inet_addr( CT2A(strIP) ) );
-    /*m_pm->DoCase(_T("caseIsLogining"));
-    CSipToolComInterface->SocketConnect( dwIp, CT2A(strUserName), CT2A(strPassWord));*/
-
-    CNetworkSetupLogic::GetSingletonPtr()->OnSipToolConnected(1);
+    NOTIFY_MSG( UI_SIPTOOL_SHOWVIDEO, (WPARAM)TRUE , 0 );
     return true;
 }
 

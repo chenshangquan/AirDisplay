@@ -39,14 +39,14 @@ CMsgHandler::~CMsgHandler()
 
 void CMsgHandler::RegisterRspHandle(CMessage *const pMsg)
 {
-    PRINTMSG_TIME("EV_NVMPAPP_REGISTER_RSP, SUCCESSFUL:%d\r\n");
+    PRINTMSG_TIME("EV_NVMPAPP_REGISTER_RSP, SUCCESSFUL.\r\n");
     SendMessage(g_dlg->m_pcMainDlg->GetSafeHwnd(), WM_REGISTER_SUCCEED, 0, 0);
     return;
 }
 
 void CMsgHandler::ViewQKShareNtfHandle(CMessage *const pMsg)
 {
-    BOOL32 bViewQKShare  = (BOOL32)*(pMsg->content);
+    BOOL32 bViewQKShare  = *(BOOL32*)(pMsg->content);
     PRINTMSG_TIME("EV_NVMPAPP_VIEWQKSHARE_Ntf, bViewQKShare:%d\r\n", bViewQKShare);
     if (bViewQKShare)
     {
@@ -62,7 +62,7 @@ void CMsgHandler::ViewQKShareNtfHandle(CMessage *const pMsg)
 
 void CMsgHandler::SocketListenNtf(CMessage *const pMsg)
 {
-    SOCKET sServerListen = (u32)*(pMsg->content);
+    SOCKET sServerListen = *(u32*)(pMsg->content);
     PRINTMSG_TIME("EV_NVMPAPP_IMIX_SOCKET_LISTEN_Ntf, sServerListen:%d\r\n", sServerListen);
     if (sServerListen != INVALID_SOCKET)
     {

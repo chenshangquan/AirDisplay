@@ -10,7 +10,7 @@ const String CSystem::strDefaultSkin	= _T("skin\\");
 const String g_stcStrLoginDlg = _T("menu");
 const String g_stcStrNetworkSetupDlg = _T("networksetup");
 const String g_strMessageBoxDlg = _T("MessageBoxDlg");
-const String g_stcStrVideoDlg = _T("video");
+const String g_stcStrVideoDlg = _T("VideoWindow");
 
 CSystem::CSystem(void)
 {

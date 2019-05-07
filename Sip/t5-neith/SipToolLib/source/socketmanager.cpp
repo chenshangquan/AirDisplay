@@ -115,26 +115,26 @@ UINT ThreadAccept(LPVOID pParam)
     sockaddr_in cliAddr;
     SOCKET CliSocket;
     int dwCliAddrLen = sizeof(cliAddr);
-    while (1)
+    //while (1)
     {
         CliSocket = accept(pThis->GetSocket(), (SOCKADDR FAR*)&cliAddr, &dwCliAddrLen);
         if(CliSocket == INVALID_SOCKET)
         {
             CSipToolPrintCtrl::GetPrintCtrl()->PrintMsg("accept error\n");
-            continue; //继续等待下一次连接
+            //continue; //继续等待下一次连接
         }
         else
         {
-            HANDLE hThread2;
+            //HANDLE hThread2;
             DWORD dwThreadId2;
 
             //hThread1 = ::CreateThread(NULL, NULL, Snd, (LPVOID*)&sClient, 0, &dwThreadId1);
-            hThread2 = ::CreateThread(NULL, NULL, Rcv, (LPVOID*)&CliSocket, 0, &dwThreadId2);
+            pThis->m_hRcvThread = ::CreateThread(NULL, NULL, Rcv, (LPVOID*)&CliSocket, 0, &dwThreadId2);
 
             //::WaitForSingleObject(hThread1, INFINITE);
-            ::WaitForSingleObject(hThread2, INFINITE);
+            ::WaitForSingleObject(pThis->m_hRcvThread, INFINITE);
             //::CloseHandle(hThread1);
-            ::CloseHandle(hThread2);
+            ::CloseHandle(pThis->m_hRcvThread);
         }
     }
 }
@@ -202,6 +202,7 @@ void CSocketManager::CloseSocket()
     CSocketManager::m_bIsSocketOpen = false;
     //OspPost(MAKEIID(AID_RKC_APP,0), UI_RKC_DISCONNECTED);
     //PRINTMSG( "关闭 Scoket...");
+    TerminateThread(m_hRcvThread, 0);
 }
 
 bool CSocketManager::IsSocket()

@@ -47,12 +47,15 @@ void CSipToolSysCtrl::OnRegister(const CMessage& cMsg)
 
 void CSipToolSysCtrl::OnStartViewShare(const CMessage& cMsg)
 {
-    BOOL32 bTPStart = (BOOL32)cMsg.content;
+    BOOL32 bTPStart = *(BOOL32*)(cMsg.content);
+    PrtSipToolMsg("bTPStart:%d\r\n", bTPStart);
+
     if (bTPStart)
     {
         PrtSipToolMsg("start view share.\r\n");
         SOCKETWORK->OpenSocket();
         u32 dwSerPort = SOCKETWORK->GetSocket();
+        PrtSipToolMsg("Socket listen:%d.\r\n", dwSerPort);
         CSipToolMsgDriver::s_pMsgDriver->PostCMsg(EV_NVMPAPP_IMIX_SOCKET_LISTEN_Ntf, &dwSerPort, sizeof(u32));
     }
     else

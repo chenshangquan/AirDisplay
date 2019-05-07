@@ -27,6 +27,14 @@ enum EmUiRkcMsg
 	ev_UISipToolDisconnected,
 #define UI_SIPTOOL_DISCONNECTED	 ev_UISipToolDisconnected
 
+    /************************************************************************/
+	/** œ‘ æ ”∆µ
+	wParam = 0
+	lparam = 0*/
+	/************************************************************************/
+	ev_UISipToolShowVideo,
+#define UI_SIPTOOL_SHOWVIDEO	 ev_UISipToolShowVideo
+
     
 
     ev_UIRkcEnd,
