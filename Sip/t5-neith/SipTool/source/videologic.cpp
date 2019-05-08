@@ -140,7 +140,7 @@ void CVideoLogic::RestoreVedioWnd()
 	} 
 
 	//切换大小时请求关键帧，防止白屏 -2014.3.4 xcr
-	//m_cDecoder.AskKeyFrame( TRUE );
+	m_cDecoder.AskKeyFrame( TRUE );
 
 	WINDOW_MGR_PTR->ShowWindowCenter(g_stcStrVideoDlg.c_str());
 }
@@ -397,15 +397,15 @@ void CVideoLogic::InitParam()
 
     m_cDecoder.SetVidDecZoomPolicy(EN_ZOOM_SCALE); //EN_ZOOM_CUT是全屏显示
 
-	//TNetRSParam tNetRSParam;
-	//tNetRSParam.m_wFirstTimeSpan = 40;
-	//tNetRSParam.m_wSecondTimeSpan = 0 /*80*/;  //第二个重传检测点
-	//tNetRSParam.m_wThirdTimeSpan = 0 /*120*/;   //第三个重传检测点
-	//tNetRSParam.m_wRejectTimeSpan = 2000;  //过期丢弃的时间跨度
-	//m_cDecoder.SetNetFeedbackVideoParam( /*tNetRSParam,*/ TRUE );
-	//m_cDecoder.SetNetFeedbackAudioParam( /*tNetRSParam,*/ TRUE );
+	TNetRSParam tNetRSParam;
+	tNetRSParam.m_wFirstTimeSpan = 40;
+	tNetRSParam.m_wSecondTimeSpan = 0 /*80*/;  //第二个重传检测点
+	tNetRSParam.m_wThirdTimeSpan = 0 /*120*/;   //第三个重传检测点
+	tNetRSParam.m_wRejectTimeSpan = 2000;  //过期丢弃的时间跨度
+	m_cDecoder.SetNetFeedbackVideoParam( /*tNetRSParam,*/ TRUE );
+	m_cDecoder.SetNetFeedbackAudioParam( /*tNetRSParam,*/ TRUE );
 
-	u32 dwLocalIP = inet_addr("172.16.160.113");
+	u32 dwLocalIP = inet_addr("127.0.0.1");
     dwLocalIP = (ntohl)(dwLocalIP);
 	////ComInterface->GetLocalIP( dwLocalIP ); 
 
@@ -427,10 +427,10 @@ void CVideoLogic::InitParam()
 	m_cDecoder.SetInfo(m_tVedioIpTransAddr.m_tRtpPort.m_wPort, m_tAudioIpTransAddr.m_tRtpPort.m_wPort, dwLocalIP , dwLocalIP );
 	TMediaParam  tMonitorParam;
 	tMonitorParam.abyDynamicPayLoad[0] = MEDIA_TYPE_H264;
-	tMonitorParam.abyDynamicPayLoad[1] = MEDIA_TYPE_AACLC;
+	tMonitorParam.abyDynamicPayLoad[1] = MEDIA_TYPE_MP3;  //MEDIA_TYPE_AACLC
 
 	tMonitorParam.abyRealType[0] = MEDIA_TYPE_H264;
-	tMonitorParam.abyRealType[1] = MEDIA_TYPE_AACLC;
+	tMonitorParam.abyRealType[1] = MEDIA_TYPE_MP3;  //MEDIA_TYPE_AACLC
 
 	tMonitorParam.atEncryptKey[0].byLen = 0;
 	tMonitorParam.atEncryptKey[1].byLen = 0;
@@ -441,7 +441,7 @@ void CVideoLogic::InitParam()
 	TAudAACParam tAACParam;
 	tAACParam.dwChannel = 1;
 	tAACParam.dwSamplePerSecond = 32000;
-	m_cDecoder.SetAACParam(tAACParam);
+	//m_cDecoder.SetAACParam(tAACParam);
 
 	m_cDecoder.SetNetRcvParam();        //设置音视频网络接收参数
 

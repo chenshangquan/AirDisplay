@@ -282,11 +282,13 @@ void CMainDlg::OnBtnStart()
     {
         return;
     }
-
+#if 0
     //发起投屏请求
     BOOL32 bTPStart = TRUE;
     OspPost(MAKEIID(AID_SIPTOOL_APP,0), EV_NVMPAPP_VIEWQKSHARE_Cmd, &bTPStart, sizeof(BOOL32), GetNodeId(), MAKEIID(AID_AIRDIS_APP, 0));
-
+#else
+    g_dlg->StartProjectScreen();
+#endif
     return;
 }
 

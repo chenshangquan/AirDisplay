@@ -1373,9 +1373,9 @@ void CtouchDlg::InitEncoderParam()
 {
 	InitAudioEncoderParam(AUDIO_MODE_BEST);
 	
-	m_cEncoder.SetDeskSharedVidCallback(&CapScreenVidStart, 0);
+	/*m_cEncoder.SetDeskSharedVidCallback(&CapScreenVidStart, 0);
 	m_cEncoder.SetDeskSharedAudCallback(&CapScreenAudStart, 0);
-	m_cEncoder.SetVideoCapStdCB(&VideoCapStdCB, 0);
+	m_cEncoder.SetVideoCapStdCB(&VideoCapStdCB, 0);*/
 }
 
 void CtouchDlg::InitVideoEncoderParam(u8 byVideoType)
@@ -1437,6 +1437,7 @@ void CtouchDlg::InitVideoEncoderParam(u8 byVideoType)
             tVideoEncParam.m_wMaxBitRate = 2048;
             tVideoEncParam.m_wMinBitRate = 2048;
         }
+        tVideoEncParam.m_dwSndNetBand = 2000;
 		tVideoEncParam.m_byEncLevel = 1;//1-bp,3-HP
 		break;
 	case MEDIA_TYPE_H262:

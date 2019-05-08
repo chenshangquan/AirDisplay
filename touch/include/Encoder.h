@@ -66,6 +66,23 @@ private:
 #define LOW_POWER_FRAME      10
 #define NORMAL_POWER_FRAME   30
 
+#define SEND_LACAL_IP           "127.0.0.1"
+#define SEND_REMOTE_IP          "127.0.0.1"
+
+#define RCV_LACAL_IP            "127.0.0.1"
+#define RCV_REMOTE_IP           "127.0.0.1"
+
+#define AUDIO_SND_LOCAL_PORT   7200
+#define AUDIO_SND_REMOTE_PORT  8000
+
+#define AUDIO_RCV_LOCAL_PORT   8000
+#define AUDIO_RCV_REMOTE_PORT  7200
+
+#define VID_SND_LOCAL_PORT   7300
+#define VID_SND_REMOTE_PORT  8100
+
+#define VID_RCV_LOCAL_PORT   8100
+#define VID_RCV_REMOTE_PORT  7300
 
 class CEncoder  
 {
@@ -95,6 +112,7 @@ public:
 	void GetVideoEncParam(TVideoEncParam &tVideoEncParam );        //得到视频编码参数
 	void SetAudioEncParam(u8 byAudioMode, u16 wAudioDuration = 0); //设置音频编码参数
 
+    void SetNetSndVideoParam();  //设置网络传送参数
 
 	u16 SetDeskSharedAudCallback(PDESKSHARECALLBACK pAudCallback, u32 dwContext);
 	u16	SetDeskSharedVidCallback(PDESKSHARECALLBACK pVidCallback, u32 dwContext);

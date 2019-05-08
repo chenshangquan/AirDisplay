@@ -163,6 +163,48 @@ BOOL CEncoder::IsPlayed()
     return m_bPlayed;
 }
 
+void CEncoder::SetNetSndVideoParam()
+{
+    s8* pSendLocalIP  = (s8*)SEND_LACAL_IP;
+    s8* pSendRemoteIP = (s8*)SEND_REMOTE_IP;
+    u32 dwSendRemotePort = VID_SND_REMOTE_PORT;
+    u32 dwSendLocalPort  = VID_SND_LOCAL_PORT;
+
+    TMnetNetParam tVidNetSndParam;
+    memset( &tVidNetSndParam, 0, sizeof(tVidNetSndParam) );
+    tVidNetSndParam.m_byRemoteNum = 1;
+    OSP_SET_NETADDR_PORT(&tVidNetSndParam.m_tLocalNet.tRTPAddr, AF_INET, dwSendLocalPort);
+    OSP_SET_NETADDR_PORT(&tVidNetSndParam.m_tLocalNet.tRTCPAddr, AF_INET, dwSendLocalPort + 1);
+    OSP_SET_NETADDR_ADDR_STR(&tVidNetSndParam.m_tLocalNet.tRTPAddr, AF_INET, pSendLocalIP);
+    OSP_SET_NETADDR_ADDR_STR(&tVidNetSndParam.m_tLocalNet.tRTCPAddr, AF_INET, pSendLocalIP);
+
+    OSP_SET_NETADDR_PORT(&tVidNetSndParam.m_tRemoteNet[0].tRTPAddr, AF_INET, dwSendRemotePort);
+    OSP_SET_NETADDR_PORT(&tVidNetSndParam.m_tRemoteNet[0].tRTCPAddr, AF_INET, dwSendRemotePort + 1);
+    OSP_SET_NETADDR_ADDR_STR(&(tVidNetSndParam.m_tRemoteNet[0].tRTPAddr), AF_INET, pSendRemoteIP);
+    OSP_SET_NETADDR_ADDR_STR(&(tVidNetSndParam.m_tRemoteNet[0].tRTCPAddr), AF_INET, pSendRemoteIP);
+
+    u16 wRet = m_pcEncoder->SetNetSndVideoParam(&tVidNetSndParam);
+    if (wRet != 0)
+    {
+        PRINTMSG("something\r\n");
+        //printf("CKdvEncoder::SetNetSndVideoParam() failed. wRet=%d \n", wRet);
+        //test_exit(EXIT_FAILURE);
+    }
+    wRet = m_pcEncoder->SetVideoActivePT(MEDIA_TYPE_H264,MEDIA_TYPE_H264);
+    if (wRet != 0)
+    {
+        //printf("CKdvEncoder::SetVideoActivePT() failed. wRet=%d \n", wRet);
+    }
+
+    wRet = m_pcEncoder->StartSendVideo();
+    if (wRet != 0)
+    {
+        //printf("CKdvEncoder::StartSendVideo() failed. wRet=%d \n", wRet);
+        //test_exit(EXIT_FAILURE);
+    }
+    return;
+}
+
 void CEncoder::SetVideoEncParam(TVideoEncParam tVideoEncParam)
 {
 	if(!m_pcEncoder)
@@ -171,6 +213,7 @@ void CEncoder::SetVideoEncParam(TVideoEncParam tVideoEncParam)
 	}
 
 	m_pcEncoder->SetVideoEncParam(&tVideoEncParam);
+    SetNetSndVideoParam();  //设置网络传送参数
 }
 
 void CEncoder::GetVideoEncParam(TVideoEncParam &tVideoEncParam )
