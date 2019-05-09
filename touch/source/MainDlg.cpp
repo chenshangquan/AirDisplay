@@ -7,7 +7,7 @@
 #include "afxdialogex.h"
 #include "touchDlg.h"
 #include "language.h"
-#include "socketmanager.h"
+//#include "socketmanager.h"
 #include "msgrecver.h"
 
 extern CtouchDlg * g_dlg;
@@ -169,7 +169,7 @@ BOOL CMainDlg::InitializeOsp()
     // OSP初始化
     char szOspApp[] = "AirDisplay";
     const u32 dwPrior = 80;
-    int nRet = g_AirDisApp.CreateApp(&szOspApp[0], AID_AIRDIS_APP, dwPrior, 300, 200);
+    int nRet = g_AirDisApp.CreateApp(&szOspApp[0], AID_AIRDIS_LOCAL_APP, dwPrior, 300, 200);
     ASSERT(nRet == 0);
 
     return TRUE;
@@ -248,18 +248,14 @@ void CMainDlg::OnBtnClose()
 void CMainDlg::OnBtnConnect()
 {
     m_stTipDes.SetWindowText(_T(""));
-    //读取IP地址
+    // 读取IP地址
     CString strIpv4Addr = m_editIP.GetShowText();
-    SOCKETWORK->SetSocketIP((CT2A)strIpv4Addr);
     u32 dwLocalIP = 0;
     u32 dwIpv4Addr = inet_addr((CT2A)strIpv4Addr);
-    //socket port
-    u32 dwSerPort = 6684;
-    SOCKETWORK->SetSocketPort(dwSerPort);
 
-    //osp connect
-    u32 dwNodeNum = OspConnectTcpNode(dwIpv4Addr, 60011, 5,
-        2, 0, &dwLocalIP);
+    // OSP Connect
+    u32 dwNodeNum = OspConnectTcpNode(dwIpv4Addr, OSP_CNT_REMOTE_PORT, 5,
+        3, 0, &dwLocalIP);
     if (INVALID_NODE == dwNodeNum)
     {
         PRINTMSG("Connection Result:INVALID NODE\r\n");
@@ -269,10 +265,10 @@ void CMainDlg::OnBtnConnect()
     SetNodeId(dwNodeNum);
 
     //设置在node连接中断时需通知的appid和InstId
-    ::OspNodeDiscCBReg( dwNodeNum, AID_AIRDIS_APP, 0 );
+    ::OspNodeDiscCBReg( dwNodeNum, AID_AIRDIS_LOCAL_APP, 0 );
 
     //发起连接
-    OspPost(MAKEIID(AID_SIPTOOL_APP,0), EV_NVMPAPP_REGISTER_REQ, NULL, 0, GetNodeId(), MAKEIID(AID_AIRDIS_APP, 0));
+    OspPost(MAKEIID(AID_AIRDIS_REMOTE_APP,0), EV_NVMPAPP_REGISTER_REQ, NULL, 0, GetNodeId(), MAKEIID(AID_AIRDIS_LOCAL_APP, 0));
     PRINTMSG_TIME("OspPost event:EV_NVMPAPP_REGISTER_REQ\r\n");
 }
 
@@ -288,6 +284,8 @@ void CMainDlg::OnBtnStart()
     OspPost(MAKEIID(AID_SIPTOOL_APP,0), EV_NVMPAPP_VIEWQKSHARE_Cmd, &bTPStart, sizeof(BOOL32), GetNodeId(), MAKEIID(AID_AIRDIS_APP, 0));
 #else
     g_dlg->StartProjectScreen();
+    // 投屏需请求关键帧，便于解码端立即响应;
+    g_dlg->GetEncode().SetAskKeyFrm();
 #endif
     return;
 }
@@ -546,7 +544,7 @@ LRESULT CMainDlg::OnViewQKShareQuit( WPARAM wParam, LPARAM lParam )
     BOOL32 bViewQKShare = (BOOL32)wParam;
     if (!bViewQKShare)
     {
-        SOCKETWORK->CloseSocket();
+        //SOCKETWORK->CloseSocket();
     }
     return 0;
 }
@@ -556,10 +554,10 @@ LRESULT CMainDlg::OnRecvImixSocket( WPARAM wParam, LPARAM lParam )
     SOCKET sImixSocket = (SOCKET)wParam;
     if (sImixSocket != INVALID_SOCKET)
     {
-        SOCKETWORK->OpenSocket();
+        //SOCKETWORK->OpenSocket();
     }
 
-    if ( SOCKETWORK->IsSocket() )
+    if ( 0)//SOCKETWORK->IsSocket() )
     {
         //start program
         //OspPost(MAKEIID(AID_SIPTOOL_APP,0), EV_NVMPAPP_VIEWQKSHARE_Cmd, &bTPStart, sizeof(BOOL32), GetNodeId(), MAKEIID(AID_AIRDIS_APP, 0));

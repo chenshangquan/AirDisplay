@@ -40,7 +40,7 @@ protected:
 
 
 
-extern const String g_stcStrLoginDlg;
+extern const String g_stcStrMainDlg;
 extern const String g_stcStrNetworkSetupDlg;
 extern const String g_strMessageBoxDlg;
 extern const String g_stcStrVideoDlg;

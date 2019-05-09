@@ -96,8 +96,12 @@ using namespace Gdiplus;
 #define MAX_VER_LEN            38
 
 #define MAX_NAME_LEN           32  //最大的名字长度
-#define AID_AIRDIS_APP         62
-#define AID_SIPTOOL_APP        53
+
+// OSP DEFINE
+#define AID_AIRDIS_LOCAL_APP   62       // 本地OSP APPID
+#define AID_AIRDIS_REMOTE_APP  53       // 远端OSP APPID
+
+#define OSP_CNT_REMOTE_PORT    60011    // 远端OSP PORT
 
 //全局定义
 extern s8 g_achDefaultFont[MAX_PATH];

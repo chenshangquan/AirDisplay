@@ -20,7 +20,7 @@
 
 #include "lm.h"
 #include "language.h"
-#include "socketmanager.h"
+//#include "socketmanager.h"
 #include "msgrecver.h"
 
 #pragma comment(lib,"netapi32.lib")
@@ -59,66 +59,66 @@ u8 *g_pVideobuf = NULL;
 #define ThreadExitTimerID           14  //音视频发送线程退出的timer的ID
 
 //视频编码回调 *pFrame为取到的码流
-void CapScreenVidStart( void *pFrame, u32 dwContext )
-{
-	g_dlg->m_bDataBlock = true;
-    static u32 dwVFrameId = 0;
-    //缓存音视频数据
-    //u8 *pVideobuf = new u8[RECVVIDEOBUF_LENGTH];
-
-	FRAMEHDR stFrameHdr = *(PFRAMEHDR)pFrame;//获得的码流是结构体FRAMEHDR
-
-	if (stFrameHdr.m_tVideoParam.m_bKeyFrame)
-	{
-		if ( !g_dlg->bFirstKeyFrame )
-		{
-			PRINTMSG_TIME( "\r\nCapScreenVidStarts回调:收到第一个关键帧\r\n");
-            dwVFrameId = 0;
-		}
-		g_dlg->bFirstKeyFrame = TRUE;		
-	}
-	if ( g_dlg->bFirstKeyFrame == FALSE )
-	{
-		return;
-	}
-
-    stFrameHdr.m_dwFrameID = ++dwVFrameId;
-    //stFrameHdr.m_dwSSRC = g_sdwVideoSsrc;  //同步源，用于接收端
-
-    memset( g_pVideobuf, 0, RECVVIDEOBUF_LENGTH );
-    memcpy( g_pVideobuf, &stFrameHdr, STRUCT_FRAMEHDR_LENGTH );
-    memcpy( g_pVideobuf+STRUCT_FRAMEHDR_LENGTH, stFrameHdr.m_pData, stFrameHdr.m_dwDataSize);
-
-    //发送视频码流至IMIX侧
-    if (g_dlg->m_bIsProjecting)
-    {
-        SOCKETWORK->SendDataPack(g_pVideobuf, STRUCT_FRAMEHDR_LENGTH+stFrameHdr.m_dwDataSize);
-    }
-
-	g_dlg->m_bDataBlock = false;
-}
+//void CapScreenVidStart( void *pFrame, u32 dwContext )
+//{
+//	g_dlg->m_bDataBlock = true;
+//    static u32 dwVFrameId = 0;
+//    //缓存音视频数据
+//    //u8 *pVideobuf = new u8[RECVVIDEOBUF_LENGTH];
+//
+//	FRAMEHDR stFrameHdr = *(PFRAMEHDR)pFrame;//获得的码流是结构体FRAMEHDR
+//
+//	if (stFrameHdr.m_tVideoParam.m_bKeyFrame)
+//	{
+//		if ( !g_dlg->bFirstKeyFrame )
+//		{
+//			PRINTMSG_TIME( "\r\nCapScreenVidStarts回调:收到第一个关键帧\r\n");
+//            dwVFrameId = 0;
+//		}
+//		g_dlg->bFirstKeyFrame = TRUE;		
+//	}
+//	if ( g_dlg->bFirstKeyFrame == FALSE )
+//	{
+//		return;
+//	}
+//
+//    stFrameHdr.m_dwFrameID = ++dwVFrameId;
+//    //stFrameHdr.m_dwSSRC = g_sdwVideoSsrc;  //同步源，用于接收端
+//
+//    memset( g_pVideobuf, 0, RECVVIDEOBUF_LENGTH );
+//    memcpy( g_pVideobuf, &stFrameHdr, STRUCT_FRAMEHDR_LENGTH );
+//    memcpy( g_pVideobuf+STRUCT_FRAMEHDR_LENGTH, stFrameHdr.m_pData, stFrameHdr.m_dwDataSize);
+//
+//    //发送视频码流至IMIX侧
+//    if (g_dlg->m_bIsProjecting)
+//    {
+//        //SOCKETWORK->SendDataPack(g_pVideobuf, STRUCT_FRAMEHDR_LENGTH+stFrameHdr.m_dwDataSize);
+//    }
+//
+//	g_dlg->m_bDataBlock = false;
+//}
 
 //音频编码回调
-void CapScreenAudStart( void *pFrame, u32 dwContext )
-{	
- //   static u32 dwAFrameId = 0;
- //   u8 achAudiobuf[RECVAUDIOBUF_LENGTH] = {0};
-
-	//FRAMEHDR stFrameHdr = *(PFRAMEHDR)pFrame;//获得的码流是结构体FRAMEHDR
-
- //   stFrameHdr.m_dwFrameID = ++dwAFrameId;
- //   //stFrameHdr.m_dwSSRC = g_sdwAudioSsrc;  //同步源，用于接收端
-
- //   memset( achAudiobuf, 0, RECVVIDEOBUF_LENGTH );
- //   memcpy( achAudiobuf, &stFrameHdr, STRUCT_FRAMEHDR_LENGTH );
- //   memcpy( achAudiobuf+STRUCT_FRAMEHDR_LENGTH, stFrameHdr.m_pData, stFrameHdr.m_dwDataSize);
-
- //   //发送音频码流至IMIX侧
- //   if (g_dlg->m_bIsProjecting)
- //   {
- //       SOCKETWORK->SendDataPack(&achAudiobuf[0], STRUCT_FRAMEHDR_LENGTH+stFrameHdr.m_dwDataSize);
- //   }
-}
+//void CapScreenAudStart( void *pFrame, u32 dwContext )
+//{	
+//    static u32 dwAFrameId = 0;
+//    u8 achAudiobuf[RECVAUDIOBUF_LENGTH] = {0};
+//
+//	FRAMEHDR stFrameHdr = *(PFRAMEHDR)pFrame;//获得的码流是结构体FRAMEHDR
+//
+//    stFrameHdr.m_dwFrameID = ++dwAFrameId;
+//    //stFrameHdr.m_dwSSRC = g_sdwAudioSsrc;  //同步源，用于接收端
+//
+//    memset( achAudiobuf, 0, RECVVIDEOBUF_LENGTH );
+//    memcpy( achAudiobuf, &stFrameHdr, STRUCT_FRAMEHDR_LENGTH );
+//    memcpy( achAudiobuf+STRUCT_FRAMEHDR_LENGTH, stFrameHdr.m_pData, stFrameHdr.m_dwDataSize);
+//
+//    //发送音频码流至IMIX侧
+//    if (g_dlg->m_bIsProjecting)
+//    {
+//        SOCKETWORK->SendDataPack(&achAudiobuf[0], STRUCT_FRAMEHDR_LENGTH+stFrameHdr.m_dwDataSize);
+//    }
+//}
 
 //UINT ThreadSendViedoData(LPVOID pParam)
 //{
@@ -1437,7 +1437,7 @@ void CtouchDlg::InitVideoEncoderParam(u8 byVideoType)
             tVideoEncParam.m_wMaxBitRate = 2048;
             tVideoEncParam.m_wMinBitRate = 2048;
         }
-        tVideoEncParam.m_dwSndNetBand = 2000;
+        tVideoEncParam.m_dwSndNetBand = 1.2*tVideoEncParam.m_wBitRate;
 		tVideoEncParam.m_byEncLevel = 1;//1-bp,3-HP
 		break;
 	case MEDIA_TYPE_H262:
@@ -1977,7 +1977,7 @@ void CtouchDlg::StartProjectScreen()
             m_pcMainDlg->ShowConnectPicture(CONNECT_OVER_RESOLUTION_LIMIT);
             Sleep(1000);  //按键保护
             BOOL32 bViewQKShare = FALSE;
-            OspPost(MAKEIID(AID_AIRDIS_APP,0), EV_NVMPAPP_VIEWQKSHARE_Cmd, &bViewQKShare, sizeof(BOOL32));
+            OspPost(MAKEIID(AID_AIRDIS_LOCAL_APP,0), EV_NVMPAPP_VIEWQKSHARE_Cmd, &bViewQKShare, sizeof(BOOL32));
             return;
         }
 
@@ -2027,7 +2027,7 @@ void CtouchDlg::StopProjectScreen(bool bNotifyHid)
 
 		OnStopScreenCatch();
 
-        SOCKETWORK->CloseSocket();
+        //SOCKETWORK->CloseSocket();
         delete g_pVideobuf;
         g_pVideobuf = NULL;
 
@@ -2035,7 +2035,7 @@ void CtouchDlg::StopProjectScreen(bool bNotifyHid)
 		if (bNotifyHid)
 		{
             BOOL32 bViewQKShare = FALSE;
-            OspPost(MAKEIID(AID_SIPTOOL_APP,0), EV_NVMPAPP_VIEWQKSHARE_Cmd, &bViewQKShare, sizeof(BOOL32), m_pcMainDlg->GetNodeId(), MAKEIID(AID_AIRDIS_APP, 0));
+            OspPost(MAKEIID(AID_AIRDIS_REMOTE_APP,0), EV_NVMPAPP_VIEWQKSHARE_Cmd, &bViewQKShare, sizeof(BOOL32), m_pcMainDlg->GetNodeId(), MAKEIID(AID_AIRDIS_LOCAL_APP, 0));
 	    }
 	}
 }

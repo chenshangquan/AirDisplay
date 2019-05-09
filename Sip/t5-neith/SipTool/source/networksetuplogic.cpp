@@ -68,7 +68,7 @@ bool CNetworkSetupLogic::OnSipToolConnected(WPARAM wparam)
         //m_pm->DoCase(_T("caseIsLogin"));
 
         //窗口变更
-        WINDOW_MGR_PTR->ShowWindow(g_stcStrLoginDlg.c_str(), false); 
+        WINDOW_MGR_PTR->ShowWindow(g_stcStrMainDlg.c_str(), false); 
         WINDOW_MGR_PTR->ShowWindowCenter(g_stcStrNetworkSetupDlg.c_str());
     }
     else
@@ -89,7 +89,7 @@ bool CNetworkSetupLogic::OnSipToolConnected(WPARAM wparam, LPARAM lparam, bool& 
         m_pm->DoCase(_T("caseIsLogin"));
 
         //窗口变更
-        WINDOW_MGR_PTR->HideWindow(g_stcStrLoginDlg.c_str());
+        WINDOW_MGR_PTR->HideWindow(g_stcStrMainDlg.c_str());
         WINDOW_MGR_PTR->ShowWindowCenter(g_stcStrNetworkSetupDlg.c_str());
     }
     else

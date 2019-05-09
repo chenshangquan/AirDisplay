@@ -1,0 +1,43 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<Window size="600,450" caption="0,0,0,30" mininfo="400,300" sizebox="4,4,4,4" roundcorner="1,1" bktrans="false" >
+<Font name="宋体" size="12" bold="false" />
+	<!--VerticalLayout name="login" bkimage="res/login/login_bg.png"-->
+	<VerticalLayout name="login" bkcolor="#ffffffff">
+		<HorizontalLayout height="30">
+			<Control />
+			<Button name="minbtn" width="43" height="28" normalimage="res/login/min_normal.png" hotimage="res/login/min_hover.png" pushedimage="res/login/min_down.png"/>
+			<Button name="closebtn" width="43" height="28" normalimage="res/login/close_normal.png" hotimage="res/login/close_hover.png" pushedimage="res/login/close_down.png"/>
+		</HorizontalLayout>
+		
+		<HorizontalLayout >
+			<!--Container bkcolor="#FFFFFFFF" name="TPLayoutWndBody">
+				<ChildLayout xmlfile="video.xml" parent="" name="PageVideo" />
+			</Container-->
+		</HorizontalLayout>
+		
+		<HorizontalLayout height="30">
+			<Control />
+			<VerticalLayout width="400">
+				<Control />
+				<Label width="394" height="14" text="Copyrigh(c)2012-2019 苏州科达科技股份有限公司 V6.0.0.3.0" textcolor="#ff8e8d8d" font="0" align="center" gdiplus="false"/>
+				<Control />
+			</VerticalLayout>
+			<Control />
+		</HorizontalLayout>
+		
+		<Case name="caseNormal">
+			<LoginBtn enabled="true"/>
+		</Case>
+		<Case name="caseIsLogining">
+			<LoginBtn enabled="false"/>
+		</Case>
+		
+		<Case name="caseShowTip">
+			<LoginTipLeb visible="true"/>
+		</Case>
+		<Case name="caseCloseTip">
+			<LoginTipLeb visible="false"/>
+		</Case>
+	
+	</VerticalLayout>
+</Window>

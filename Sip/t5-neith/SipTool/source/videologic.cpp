@@ -17,7 +17,7 @@ APP_BEGIN_MSG_MAP(CVideoLogic,CNotifyUIImpl)
     USER_MSG(UI_CNSINS_START_DUALCODESTREAM_RSP,OnStartRsp)
     USER_MSG(UI_CNS_DUAL_KEY_NOTIFY,OnDualCodeEnCryptKeyNty)
     USER_MSG(UI_CNS_DISCONNECTED,OnDisconnect)*/
-    USER_MSG(UI_SIPTOOL_SHOWVIDEO, OnShowVideo)
+    //USER_MSG(UI_SIPTOOL_SHOWVIDEO, OnShowVideo)
 APP_END_MSG_MAP()
 
 
@@ -42,15 +42,25 @@ bool CVideoLogic::OnCreate(TNotifyUI& msg)
 
 bool CVideoLogic::OnInit(TNotifyUI& msg)
 {
-	SetWindowPos( m_pm->GetPaintWindow(), HWND_TOPMOST, 0, 0, 0, 0, SWP_NOACTIVATE|SWP_NOSIZE|SWP_NOMOVE);
+    s32 nTop = 30;
+    if ( CPaintManagerUI::IsSelfAdaption() )
+    {
+        float fAdpX, fAdpY;
+        CPaintManagerUI::GetAdpResolution( &fAdpX, &fAdpY );
+        nTop = s32(nTop * fAdpY);
+    }
+	SetWindowPos( m_pm->GetPaintWindow(), NULL, 0, nTop, 0, 0, SWP_NOACTIVATE|SWP_NOSIZE);
 
-	RAWINPUTDEVICE rid;
-	rid.usUsagePage = 0x01;
-	rid.usUsage = 0x06;
-	rid.dwFlags = RIDEV_INPUTSINK;
-	rid.hwndTarget = m_pm->GetPaintWindow();
+    /*RAWINPUTDEVICE rid;
+    rid.usUsagePage = 0x01;
+    rid.usUsage = 0x06;
+    rid.dwFlags = RIDEV_INPUTSINK;
+    rid.hwndTarget = m_pm->GetPaintWindow();
 
-	RegisterRawInputDevices(&rid, 1, sizeof(RAWINPUTDEVICE));
+    RegisterRawInputDevices(&rid, 1, sizeof(RAWINPUTDEVICE));*/
+
+    bool bHandle = true;
+    OnShowVideo(1,0,bHandle);
 	return NO_ERROR;
 }
 
@@ -142,7 +152,7 @@ void CVideoLogic::RestoreVedioWnd()
 	//ÇÐ»»´óÐ¡Ê±ÇëÇó¹Ø¼üÖ¡£¬·ÀÖ¹°×ÆÁ -2014.3.4 xcr
 	m_cDecoder.AskKeyFrame( TRUE );
 
-	WINDOW_MGR_PTR->ShowWindowCenter(g_stcStrVideoDlg.c_str());
+	WINDOW_MGR_PTR->ShowWindow(g_stcStrVideoDlg.c_str());
 }
 
 bool CVideoLogic::OnDualRecvStateNotify(WPARAM wParam, LPARAM lParam, bool& bHandle)

@@ -38,6 +38,13 @@ protected:
      */
     bool OnDestroy(TNotifyUI& msg);
 
+    /** 窗口大小变化消息 
+	 *  @param[in] 
+	 *  @node 
+	 *  @return 
+     */
+    bool OnSize(TNotifyUI& msg);
+
     //点击最小化按钮
     bool OnMinBtnClicked(TNotifyUI& msg);
     //点击关闭按钮

@@ -2,6 +2,7 @@
 #include "menulogic.h"
 #include "networksetuplogic.h"
 #include "videologic.h"
+#include "siptoolcommonop.h"
 
 #define TIMER_LENGTH  4000
 #define TIMER_SHOWTIP 200
@@ -10,6 +11,7 @@ APP_BEGIN_MSG_MAP(CMenuLogic, CNotifyUIImpl)
     MSG_CREATEWINDOW(_T("login"), OnCreate)
     MSG_INIWINDOW(_T("login"), OnInit)
     MSG_WINDOWDESTORY(_T("login"), OnDestroy)
+    MSG_WINDOWSIZE(_T("login"), OnSize)
 
     MSG_CLICK(_T("minbtn"), OnMinBtnClicked)
     MSG_CLICK(_T("closebtn"), OnCloseBtnClicked)
@@ -38,12 +40,12 @@ bool CMenuLogic::OnCreate( TNotifyUI& msg )
     RECT rcParent;
     HWND hparent = GetParent(m_pm->GetPaintWindow());
     GetWindowRect(hparent,&rcParent);
-    SetWindowPos( m_pm->GetPaintWindow(), HWND_TOP, rcParent.left, rcParent.top, 0, 0, SWP_NOSIZE |SWP_NOACTIVATE );
+    SetWindowPos( m_pm->GetPaintWindow(), HWND_TOP, rcParent.left, rcParent.top, 0, 0, SWP_NOACTIVATE|SWP_NOSIZE );
 
     HWND hWnd = m_pm->GetPaintWindow();
     LONG styleValue = ::GetWindowLong(hWnd, GWL_STYLE);
     styleValue &= ~(WS_EX_APPWINDOW);
-    ::SetWindowLong(hWnd, GWL_STYLE, styleValue);
+    ::SetWindowLong(hWnd, GWL_STYLE, styleValue|WS_SIZEBOX|WS_CAPTION|WS_CLIPSIBLINGS | WS_CLIPCHILDREN);
 
     return false;
 }
@@ -53,7 +55,8 @@ bool CMenuLogic::OnInit( TNotifyUI& msg )
 {
     REG_RCKTOOL_MSG_WND_OB(m_pm->GetPaintWindow());
 
-    WINDOW_MGR_PTR->ShowWindow( g_stcStrVideoDlg.c_str(), false );
+    //ISipToolCommonOp::ShowControl( true, m_pm, _T("PageVideo") );
+    WINDOW_MGR_PTR->ShowWindow( g_stcStrVideoDlg.c_str(), true );
     return true;
 }
 
@@ -63,15 +66,25 @@ bool CMenuLogic::OnDestroy( TNotifyUI& msg )
     return true;
 }
 
+bool CMenuLogic::OnSize( TNotifyUI& msg )
+{
+    RECT rcParent;
+    GetWindowRect(m_pm->GetPaintWindow(),&rcParent);
+
+    if (WINDOW_MGR_PTR->GetWindow( g_stcStrVideoDlg.c_str()))
+        WINDOW_MGR_PTR->GetWindow( g_stcStrVideoDlg.c_str())->ResizeClient(rcParent.right-rcParent.left, rcParent.bottom-rcParent.top-60);
+    return true;
+}
+
 bool CMenuLogic::OnMinBtnClicked(TNotifyUI& msg)
 {
-    WINDOW_MGR_PTR->ShowWindowMinsize(g_stcStrLoginDlg.c_str());  
+    WINDOW_MGR_PTR->ShowWindowMinsize(g_stcStrMainDlg.c_str());  
     return true;
 }
 
 bool CMenuLogic::OnCloseBtnClicked(TNotifyUI& msg)
 {
-    WINDOW_MGR_PTR->CloseWindow(g_stcStrLoginDlg.c_str());  
+    WINDOW_MGR_PTR->CloseWindow(g_stcStrMainDlg.c_str());  
     TerminateProcess(GetCurrentProcess(), 0); 
     return false;
 }
