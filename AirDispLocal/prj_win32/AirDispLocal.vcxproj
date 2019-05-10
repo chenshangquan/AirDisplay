@@ -1,0 +1,241 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{CC620771-7E25-4431-A1BC-A05543B1833B}</ProjectGuid>
+    <RootNamespace>AirDispLocal</RootNamespace>
+    <Keyword>MFCProj</Keyword>
+    <ProjectName>AirDispLocal</ProjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <CharacterSet>Unicode</CharacterSet>
+    <UseOfMfc>Dynamic</UseOfMfc>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+    <UseOfMfc>Dynamic</UseOfMfc>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>..\include;..\..\common;..\include\uibase;.\;..\..\..\..\10-common\include\system;..\..\..\..\10-common\include\nv;..\..\..\..\10-common\include\protocol;..\..\..\..\10-common\include\platform;..\..\CommInterfaceDll\include</AdditionalIncludeDirectories>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>..\..\CommInterfaceDll\prj_win32\debug;..\..\..\..\10-common\lib\releaselib\debug\win32;..\..\..\..\10-common\lib\locallib\debug\win32;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <IgnoreSpecificDefaultLibraries>libcmtd.lib</IgnoreSpecificDefaultLibraries>
+      <UACExecutionLevel>RequireAdministrator</UACExecutionLevel>
+    </Link>
+    <Midl>
+      <MkTypLibCompatible>false</MkTypLibCompatible>
+      <ValidateAllParameters>true</ValidateAllParameters>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </Midl>
+    <ResourceCompile>
+      <Culture>0x0409</Culture>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>..\..\common\include\nms1;..\..\common\include\system;..\..\common\include\protocol;..\..\common\include\platform;..\..\common\include\nv;..\include;..\..\common;..\include\uibase;.\</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalLibraryDirectories>..\..\common\lib\releaselib\release\win32;..\..\common\lib\locallib\release\win32;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <IgnoreSpecificDefaultLibraries>libcmt.lib</IgnoreSpecificDefaultLibraries>
+      <UACExecutionLevel>AsInvoker</UACExecutionLevel>
+    </Link>
+    <Midl>
+      <MkTypLibCompatible>false</MkTypLibCompatible>
+      <ValidateAllParameters>true</ValidateAllParameters>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </Midl>
+    <ResourceCompile>
+      <Culture>0x0409</Culture>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <None Include="..\Tulips.jpg" />
+    <None Include="ReadMe.txt" />
+    <None Include="res\banner_bk.png" />
+    <None Include="res\bitmap.bmp" />
+    <None Include="res\bitmap1.bmp" />
+    <None Include="res\btn_banner_stop.png" />
+    <None Include="res\btn_hover.png" />
+    <None Include="res\btn_normal.png" />
+    <None Include="res\btn_ok_normal.png" />
+    <None Include="res\btn_ok_press.png" />
+    <None Include="res\btn_poweroff_cal_normal.png" />
+    <None Include="res\btn_poweroff_cal_press.png" />
+    <None Include="res\btn_poweroff_ok_normal.png" />
+    <None Include="res\btn_poweroff_ok_press.png" />
+    <None Include="res\btn_pushed.png" />
+    <None Include="res\close.png" />
+    <None Include="res\close_hover.png" />
+    <None Include="res\close_sel.png" />
+    <None Include="res\connect.png" />
+    <None Include="res\connecting.gif" />
+    <None Include="res\connect_arrow.png" />
+    <None Include="res\connect_bk.png" />
+    <None Include="res\connect_device.png" />
+    <None Include="res\connect_fail.png" />
+    <None Include="res\connect_success.gif" />
+    <None Include="res\connect_usb.png" />
+    <None Include="res\info.png" />
+    <None Include="res\info_sel.png" />
+    <None Include="res\log.png" />
+    <None Include="res\main_bk.png" />
+    <None Include="res\menu_check_hover.ico" />
+    <None Include="res\menu_check_normal.ico" />
+    <None Include="res\min.png" />
+    <None Include="res\min_hover.png" />
+    <None Include="res\min_sel.png" />
+    <None Include="res\msgbox_bk.png" />
+    <None Include="res\png1.png" />
+    <None Include="res\screen_projecting.png" />
+    <None Include="res\slider_highlight_left.png" />
+    <None Include="res\slider_highlight_middle.png" />
+    <None Include="res\slider_highlight_right.png" />
+    <None Include="res\slider_normal_left.png" />
+    <None Include="res\slider_normal_middle.png" />
+    <None Include="res\slider_normal_right.png" />
+    <None Include="res\slider_thumb_normal.png" />
+    <None Include="res\slider_thumb_press.png" />
+    <None Include="res\tip.png" />
+    <None Include="res\AirDispLocal.ico" />
+    <None Include="res\AirDispLocal.rc2" />
+    <None Include="res\trayicon_down.ico" />
+    <None Include="res\trayicon_middle_down.ico" />
+    <None Include="res\trayicon_middle_up.ico" />
+    <None Include="res\trayicon_up.ico" />
+    <None Include="res\upgrade.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\common\epvolume.h" />
+    <ClInclude Include="..\..\common\print.h" />
+    <ClInclude Include="..\..\common\progress.h" />
+    <ClInclude Include="..\include\AboutDlg.h" />
+    <ClInclude Include="..\include\BannerDlg.h" />
+    <ClInclude Include="..\include\commonstruct.h" />
+    <ClInclude Include="..\include\datalistclass.h" />
+    <ClInclude Include="..\include\Encoder.h" />
+    <ClInclude Include="..\include\language.h" />
+    <ClInclude Include="..\include\logo.h" />
+    <ClInclude Include="..\include\MainDlg.h" />
+    <ClInclude Include="..\include\MenuEx.h" />
+    <ClInclude Include="..\include\msgrecver.h" />
+    <ClInclude Include="..\include\ppt.h" />
+    <ClInclude Include="..\include\semaphoreclass.h" />
+    <ClInclude Include="..\include\socketmanager.h" />
+    <ClInclude Include="..\include\templateClass.h" />
+    <ClInclude Include="..\include\uibase\basedlg.h" />
+    <ClInclude Include="..\include\uibase\msgdispatch.h" />
+    <ClInclude Include="..\include\uibase\transparentbasedlg.h" />
+    <ClInclude Include="..\include\uibase\transparentbtn.h" />
+    <ClInclude Include="..\include\uibase\transparentdlg.h" />
+    <ClInclude Include="..\include\uibase\transparentedit.h" />
+    <ClInclude Include="..\include\uibase\transparentgif.h" />
+    <ClInclude Include="..\include\uibase\transparentprogressctrl.h" />
+    <ClInclude Include="..\include\uibase\transparentsyslink.h" />
+    <ClInclude Include="..\include\uibase\transtatic.h" />
+    <ClInclude Include="..\include\uibase\utility.h" />
+    <ClInclude Include="..\include\uicommon.h" />
+    <ClInclude Include="Resource.h" />
+    <ClInclude Include="stdafx.h" />
+    <ClInclude Include="targetver.h" />
+    <ClInclude Include="AirDispLocal.h" />
+    <ClInclude Include="AirDispLocalDlg.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\common\print.cpp" />
+    <ClCompile Include="..\..\common\progress.cpp" />
+    <ClCompile Include="..\source\AboutDlg.cpp" />
+    <ClCompile Include="..\source\BannerDlg.cpp" />
+    <ClCompile Include="..\source\datalistclass.cpp" />
+    <ClCompile Include="..\source\Encoder.cpp" />
+    <ClCompile Include="..\source\logo.cpp" />
+    <ClCompile Include="..\source\MainDlg.cpp" />
+    <ClCompile Include="..\source\MenuEx.cpp" />
+    <ClCompile Include="..\source\msgrecver.cpp" />
+    <ClCompile Include="..\source\ppt.cpp" />
+    <ClCompile Include="..\source\semaphoreclass.cpp" />
+    <ClCompile Include="..\source\socketmanager.cpp" />
+    <ClCompile Include="..\source\uibase\basedlg.cpp" />
+    <ClCompile Include="..\source\uibase\msgdispatch.cpp" />
+    <ClCompile Include="..\source\uibase\transparentbasedlg.cpp" />
+    <ClCompile Include="..\source\uibase\transparentbtn.cpp" />
+    <ClCompile Include="..\source\uibase\transparentdlg.cpp" />
+    <ClCompile Include="..\source\uibase\transparentedit.cpp" />
+    <ClCompile Include="..\source\uibase\transparentgif.cpp" />
+    <ClCompile Include="..\source\uibase\transparentprogressctrl.cpp" />
+    <ClCompile Include="..\source\uibase\transparentsyslink.cpp" />
+    <ClCompile Include="..\source\uibase\transtatic.cpp" />
+    <ClCompile Include="..\source\uibase\utility.cpp" />
+    <ClCompile Include="stdafx.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="AirDispLocal.cpp" />
+    <ClCompile Include="AirDispLocalDlg.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="AirDispLocal.rc" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+  <ProjectExtensions>
+    <VisualStudio>
+      <UserProperties RESOURCE_FILE="AirDispLocal.rc" />
+    </VisualStudio>
+  </ProjectExtensions>
+</Project>

@@ -1,0 +1,8 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<index>
+<!--index下配置窗口索引 file-窗口对应xml文件   logic-窗口逻辑类名  parent-父窗口名  style(frame|dialog|child)风格,默认frame-->
+  <AirDispRemote file="main.xml" logic="CMenuLogic" style="frame" />
+  <!--networksetup file="networksetup.xml" logic="CNetworkSetupLogic" parent="siptool" style="dialog" /-->
+  <MessageBoxDlg file="messagebox.xml" logic="CMessageBoxLogic" parent="AirDispRemote" style="dialog" /> 
+  <VideoWindow file="video.xml" logic="CVideoLogic" parent="AirDispRemote" style="child" />
+</index>

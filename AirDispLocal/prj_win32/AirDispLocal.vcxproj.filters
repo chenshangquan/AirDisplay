@@ -1,0 +1,374 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="uibase">
+      <UniqueIdentifier>{e6457848-dffe-4b9a-82ab-35b334cbff4e}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ReadMe.txt" />
+    <None Include="..\Tulips.jpg">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\banner_bk.png">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\bitmap.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\bitmap1.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\btn_banner_stop.png">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\btn_ok_normal.png">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\btn_ok_press.png">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\btn_poweroff_cal_normal.png">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\btn_poweroff_cal_press.png">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\btn_poweroff_ok_normal.png">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\btn_poweroff_ok_press.png">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\close.png">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\close_sel.png">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\connect.png">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\info.png">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\info_sel.png">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\main_bk.png">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\min.png">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\min_sel.png">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\msgbox_bk.png">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\png1.png">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\slider_highlight_left.png">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\slider_highlight_middle.png">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\slider_highlight_right.png">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\slider_normal_left.png">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\slider_normal_middle.png">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\slider_normal_right.png">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\slider_thumb_normal.png">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\slider_thumb_press.png">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\tip.png">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\close_hover.png">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\min_hover.png">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\connect_bk.png">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\connect_fail.png">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\screen_projecting.png">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\connecting.gif">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\connect_success.gif">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\log.png">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\menu_check_normal.ico">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\menu_check_hover.ico">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\trayicon_down.ico">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\trayicon_middle_down.ico">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\trayicon_middle_up.ico">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\trayicon_up.ico">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\upgrade.png">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\connect_usb.png">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\connect_arrow.png">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\connect_device.png">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\btn_hover.png">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\btn_normal.png">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\btn_pushed.png">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\AirDispLocal.ico">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\AirDispLocal.rc2">
+      <Filter>Resource Files</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="stdafx.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="targetver.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\AboutDlg.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\BannerDlg.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\commonstruct.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\Encoder.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\uicommon.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\uibase\basedlg.h">
+      <Filter>uibase</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\uibase\msgdispatch.h">
+      <Filter>uibase</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\uibase\transparentbasedlg.h">
+      <Filter>uibase</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\uibase\transparentbtn.h">
+      <Filter>uibase</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\uibase\transparentdlg.h">
+      <Filter>uibase</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\uibase\transparentedit.h">
+      <Filter>uibase</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\uibase\transparentprogressctrl.h">
+      <Filter>uibase</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\uibase\transtatic.h">
+      <Filter>uibase</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\uibase\utility.h">
+      <Filter>uibase</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\MainDlg.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\templateClass.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\uibase\transparentgif.h">
+      <Filter>uibase</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\uibase\transparentsyslink.h">
+      <Filter>uibase</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\MenuEx.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\semaphoreclass.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\datalistclass.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\logo.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\print.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\progress.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\epvolume.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\ppt.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\language.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\socketmanager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\msgrecver.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AirDispLocal.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AirDispLocalDlg.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="stdafx.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\AboutDlg.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\BannerDlg.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\Encoder.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\uibase\basedlg.cpp">
+      <Filter>uibase</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\uibase\msgdispatch.cpp">
+      <Filter>uibase</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\uibase\transparentbasedlg.cpp">
+      <Filter>uibase</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\uibase\transparentbtn.cpp">
+      <Filter>uibase</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\uibase\transparentdlg.cpp">
+      <Filter>uibase</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\uibase\transparentedit.cpp">
+      <Filter>uibase</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\uibase\transparentprogressctrl.cpp">
+      <Filter>uibase</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\uibase\transtatic.cpp">
+      <Filter>uibase</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\uibase\utility.cpp">
+      <Filter>uibase</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\MainDlg.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\MenuEx.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\uibase\transparentsyslink.cpp">
+      <Filter>uibase</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\uibase\transparentgif.cpp">
+      <Filter>uibase</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\semaphoreclass.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\datalistclass.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\logo.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\print.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\progress.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\ppt.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\socketmanager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\msgrecver.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="AirDispLocal.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="AirDispLocalDlg.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="AirDispLocal.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+</Project>
