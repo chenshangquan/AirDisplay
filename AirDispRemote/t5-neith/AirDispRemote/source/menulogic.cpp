@@ -17,12 +17,9 @@ APP_BEGIN_MSG_MAP(CMenuLogic, CNotifyUIImpl)
     MSG_CLICK(_T("closebtn"), OnCloseBtnClicked)
     MSG_CLICK(_T("LoginBtn"), OnLoginBtnClicked)
 
-    //MSG_SELECTCHANGE(_T("CheckAutoLogin"), OnCheckAutoLoginSel)
-    //MSG_SELECTCHANGE(_T("CheckRemPassWord"), OnCheckRemPassWordSel)
-
     MSG_TIMER(_T("LoginTipLeb"), OnShowTipTimer)
 
-    //USER_MSG(UI_AIRDISPREMOTE_CONNECTED , OnAirDispRemoteConnected)
+    USER_MSG(UI_AIRDISPREMOTE_CONNECTED , OnAirDispRemoteConnected)
     //USER_MSG(UI_RKC_DISCONNECTED , OnAirDispRemoteDisconnected)
 APP_END_MSG_MAP()
 
@@ -132,48 +129,11 @@ bool CMenuLogic::OnCheckRemPassWordSel(TNotifyUI& msg)
 
 bool CMenuLogic::OnAirDispRemoteConnected( WPARAM wparam, LPARAM lparam, bool& bHandle )
 {
-    m_pm->DoCase(_T("caseNormal"));
+    //m_pm->DoCase(_T("caseNormal"));
 
-    bool bIsLogin = (bool)wparam;
-    if (bIsLogin == false )
-    {
-        ShowTip(_T("连接到主机失败"));
-    }
-    else
-    {
-        CString strIniPath = GetIniFilePath();
-        CString strLoginIP = _T("172.0.0.1");
-        CString strUserName = (IAirDispRemoteCommonOp::GetControlText( m_pm ,_T("edtUserName"))).c_str();
-        CString strPassWord = (IAirDispRemoteCommonOp::GetControlText( m_pm ,_T("edtPassWord"))).c_str();
-        WritePrivateProfileString(_T("LoginInfo"),_T("LoginIP"),strLoginIP,strIniPath);
-        WritePrivateProfileString(_T("LoginInfo"),_T("UserName"),strUserName,strIniPath);
-        COptionUI *pCheckRemPassWord = (COptionUI*)IAirDispRemoteCommonOp::FindControl( m_pm, _T("CheckRemPassWord") );
-        COptionUI *pCheckAutoLogin = (COptionUI*)IAirDispRemoteCommonOp::FindControl( m_pm, _T("CheckAutoLogin") );
-        if (pCheckRemPassWord)
-        {
-            if (pCheckRemPassWord->IsSelected())
-            {
-                WritePrivateProfileString(_T("LoginInfo"),_T("PassWord"),strPassWord,strIniPath);
-                WritePrivateProfileString(_T("LoginInfo"),_T("RemberPW"),_T("1"),strIniPath);
-            }
-            else
-            {
-                WritePrivateProfileString(_T("LoginInfo"),_T("PassWord"),_T(""),strIniPath);
-                WritePrivateProfileString(_T("LoginInfo"),_T("RemberPW"),_T("0"),strIniPath);
-            }
-        }
-        if (pCheckAutoLogin)
-        {
-            if (pCheckAutoLogin->IsSelected())
-            {
-                WritePrivateProfileString(_T("LoginInfo"),_T("AutoLogin"),_T("1"),strIniPath);
-            }
-            else
-            {
-                WritePrivateProfileString(_T("LoginInfo"),_T("AutoLogin"),_T("0"),strIniPath);
-            }
-        }
-    }
+    u32 dwRemoteVidPort = (u32)wparam;
+	u32 dwRemoteAudPort = (u32)lparam;
+    
     return true;
 }
 

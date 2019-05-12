@@ -267,15 +267,17 @@ void CMainDlg::OnBtnConnect()
     // 设置在node连接中断时需通知的Appid和InstId
     ::OspNodeDiscCBReg( dwNodeNum, AID_AIRDIS_LOCAL_APP, 0 );
 
-    NetSendMediaPort tNetSendMediaPort;
-    g_dlg->GetEncode().GetLocalMediaTransPort(tNetSendMediaPort);
-    PRINTMSG_TIME("wVedioPort:%d, wAudioPort:%d\r\n", tNetSendMediaPort.m_dwVidPort, tNetSendMediaPort.m_dwAudPort);
+	NetSendPara tNetSendPara;
+	g_dlg->GetEncode().SetNetSendIP(dwLocalIP, dwIpv4Addr);
+	g_dlg->GetEncode().SetLocalSendPort();
+	g_dlg->GetEncode().GetNetSendPara(tNetSendPara);
+    PRINTMSG_TIME("wVedioPort:%d, wAudioPort:%d\r\n", tNetSendPara.m_dwLocalVidPort, tNetSendPara.m_dwLocalAudPort);
 
     // 发起连接
-    OspPost(MAKEIID(AID_AIRDIS_REMOTE_APP,0), EV_NVMPAPP_REGISTER_REQ, &tNetSendMediaPort,
-        sizeof(NetSendMediaPort), GetNodeId(), MAKEIID(AID_AIRDIS_LOCAL_APP, 0));
+    OspPost(MAKEIID(AID_AIRDIS_REMOTE_APP,0), EV_NVMPAPP_CONNECT_REQ, &tNetSendPara,
+        sizeof(NetSendPara), GetNodeId(), MAKEIID(AID_AIRDIS_LOCAL_APP, 0));
 
-    PRINTMSG_TIME("OspPost event:EV_NVMPAPP_REGISTER_REQ\r\n");
+    PRINTMSG_TIME("OspPost event:EV_NVMPAPP_CONNECT_REQ\r\n");
 }
 
 void CMainDlg::OnBtnStart()

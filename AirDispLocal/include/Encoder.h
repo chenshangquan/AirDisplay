@@ -117,8 +117,11 @@ public:
 	void GetVideoEncParam(TVideoEncParam &tVideoEncParam );        //得到视频编码参数
 	void SetAudioEncParam(u8 byAudioMode, u16 wAudioDuration = 0); //设置音频编码参数
 
-    void GetLocalMediaTransPort(NetSendMediaPort &tNetSendMediaPort);
-    void SetRemoteAVNetParam();
+	void SetNetSendIP(u32 dwLocalIP, u32 dwRemoteIP);
+	void SetLocalSendPort(void);
+    void SetRemoteSendPort(u32 dwRemoteVidPort, u32 dwRemoteAudPort);
+	void GetNetSendPara(NetSendPara &tNetSendPara);
+
     void SetNetSndVideoParam();  //设置网络传送参数
 
 	u16 SetDeskSharedAudCallback(PDESKSHARECALLBACK pAudCallback, u32 dwContext);
@@ -160,9 +163,6 @@ private:
     s16             m_hTimerAskKeyFrmForce;// //强制请求关键帧，一般用于刚开启解码器，连续请求3次关键帧 PS:由于解码器还未稳定是否需要关键帧状态还不准确
 
     // 网络发送参数
-    //s8* m_pSendLocalIP[16];
-    s8* m_pSendRemoteIP[16];
-    NetSendMediaPort m_tLocalMediaPort;
-    NetSendMediaPort m_tRemoteMediaPort;
+    NetSendPara m_tNetSendPara;
 };
 #endif // !defined(AFX_DECODER_H__53DB286A_35A9_48CE_B5CC_DC2AE7D0A62B__INCLUDED_)

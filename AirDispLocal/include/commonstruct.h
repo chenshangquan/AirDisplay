@@ -19,21 +19,29 @@ enum EmTpIFrameCheckType
 	TP_IFrameCheck_ChairWait,			//主席发言时，切换到其他发言人，主席的监测
 };
 
-typedef struct tagNetSendMediaPort
+typedef struct tagNetSendPara
 {
-    u32 m_dwVidPort;
-    u32 m_dwAudPort;	
+	u32 m_dwLocalIP;
+	u32 m_dwRemoteIP;
+    u32 m_dwLocalVidPort;
+    u32 m_dwLocalAudPort;	
+	u32 m_dwRemoteVidPort;
+	u32 m_dwRemoteAudPort;	
 
     void clear()
     {
-        m_dwVidPort = 0;
-        m_dwAudPort = 0;
+        m_dwLocalIP  = 0;
+        m_dwRemoteIP = 0;
+		m_dwLocalVidPort = 0;
+		m_dwLocalAudPort = 0;
+		m_dwRemoteVidPort = 0;
+		m_dwRemoteAudPort = 0;
     }
-    tagNetSendMediaPort()
+    tagNetSendPara()
     {
         clear();
     }
-    tagNetSendMediaPort& operator = (const tagNetSendMediaPort& tRhs)
+    /*tagNetSendMediaPort& operator = (const tagNetSendMediaPort& tRhs)
     {
         if (this == &tRhs)
         {
@@ -43,5 +51,5 @@ typedef struct tagNetSendMediaPort
         this->m_dwVidPort = tRhs.m_dwVidPort;
         this->m_dwAudPort = tRhs.m_dwAudPort;
         return *this;
-    }
-}NetSendMediaPort;
+    }*/
+}NetSendPara;

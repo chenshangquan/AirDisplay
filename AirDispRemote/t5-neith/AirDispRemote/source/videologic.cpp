@@ -1,8 +1,11 @@
 #include "StdAfx.h"
+#include <Shlobj.h>
+#include <shlwapi.h>
 #include "videologic.h"
 //#include "codeclib_vs2010.h"
 #include "messageboxlogic.h"
 //#include "mainframelogic.h"
+//#include "airdispremotemsgdriver.h"
 
 template<> CVideoLogic* Singleton<CVideoLogic>::ms_pSingleton  = NULL;
 
@@ -18,6 +21,8 @@ APP_BEGIN_MSG_MAP(CVideoLogic,CNotifyUIImpl)
     USER_MSG(UI_CNS_DUAL_KEY_NOTIFY,OnDualCodeEnCryptKeyNty)
     USER_MSG(UI_CNS_DISCONNECTED,OnDisconnect)*/
     //USER_MSG(UI_AIRDISPREMOTE_SHOWVIDEO, OnShowVideo)
+	USER_MSG(UI_AIRDISPREMOTE_CONNECTED , OnAirDispRemoteConnected)
+	USER_MSG(UI_AIRDISPREMOTE_MEDIAPORT , OnAirDispRemoteMediaPort)
 APP_END_MSG_MAP()
 
 
@@ -89,6 +94,79 @@ bool CVideoLogic::OnHideVideo(TNotifyUI& msg)
 	WINDOW_MGR_PTR->ShowWindow( g_stcStrVideoDlg.c_str(), false );
 	return true;
 }
+
+void GetLocalIPAddr(u32 &dwLocalIP)
+{
+	WSADATA wsaData;
+	s8 achHost[MAX_PATH + 1] = {0};
+	in_addr tAddr = {0};
+	s32 nIndex = 0;
+
+	// 加载Winsock库;
+	if (::WSAStartup( MAKEWORD(2,0), &wsaData ))
+	{
+		//PRINTMSG("WSAStartup Failed!!\r\n");
+		return;
+	}
+
+	::gethostname(achHost, MAX_PATH);
+	hostent *pHost = ::gethostbyname(achHost);
+	if (pHost == NULL)
+	{
+		//PRINTMSG("Get Host Content Failed!!\r\n");
+		return;
+	}
+
+	// 获取本机第一个IP地址;
+	for (nIndex = 0;;nIndex++)
+	{
+		s8 *pAddr = pHost->h_addr_list[nIndex];
+		if (pAddr != NULL)
+		{
+			memcpy(&tAddr.S_un.S_addr, pAddr, pHost->h_length);
+			break;
+		}
+	}
+
+	dwLocalIP = inet_addr(::inet_ntoa(tAddr));
+	::WSACleanup();
+
+	return;
+}
+
+bool CVideoLogic::OnAirDispRemoteConnected( WPARAM wparam, LPARAM lparam, bool& bHandle )
+{
+	//m_pm->DoCase(_T("caseNormal"));
+
+	u32 dwRemoteIP = (u32)wparam;
+	u32 dwLocalIP = (u32)lparam;
+	m_cDecoder.SetNetSendIP(dwLocalIP, dwRemoteIP);
+
+	//u32 dwLocalIP = 0;
+	//GetLocalIPAddr(dwLocalIP);
+	//if (dwLocalIP == 0)
+	//{
+	//	// print
+	//	return false;
+	//}
+
+
+	return true;
+}
+
+bool CVideoLogic::OnAirDispRemoteMediaPort( WPARAM wparam, LPARAM lparam, bool& bHandle )
+{
+	u32 dwRemoteVidPort = (u32)wparam;
+	u32 dwRemoteVudPort = (u32)lparam;
+
+	m_cDecoder.SetLocalSendPort();
+
+	//CAirDispRemoteMsgDriver::s_pMsgDriver->PostCMsg(EV_NVMPAPP_IMIX_SOCKET_LISTEN_Ntf, &dwSerPort, sizeof(u32));
+
+
+	return true;
+}
+
 
 bool CVideoLogic::OnShowVideo(WPARAM wParam, LPARAM lParam, bool& bHandle)
 {

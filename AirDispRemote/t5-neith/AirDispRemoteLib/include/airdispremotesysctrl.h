@@ -14,7 +14,7 @@ public:
 protected:
     void BuildEventsMap();
 
-    void OnRegister(const CMessage& cMsg);
+    void OnConnected(const CMessage& cMsg);
     void OnStartViewShare(const CMessage& cMsg);
 
     void OnDicconnected(const CMessage& cMsg);

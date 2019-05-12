@@ -154,17 +154,41 @@ void CDecoder::SetInfo(u16 wVRTPPort, u16 wARTPPort, u32 dwRTPAddr, u32 dwRTCPAd
     
 }
 
-void CDecoder::GetLocalMediaTransPort(NetSendMediaPort &tNetSendMediaPort)
+void CDecoder::SetNetSendIP(u32 dwLocalIP, u32 dwRemoteIP)
 {
-    u32 dwLocalIP = inet_addr("127.0.0.1");
-    dwLocalIP = (ntohl)(dwLocalIP);
+	m_tNetSendPara.m_dwLocalIP = dwLocalIP;
+	m_tNetSendPara.m_dwRemoteIP = dwRemoteIP;
 
-    m_tLocalMediaPort.m_dwVidPort = GetIdlePort( dwLocalIP,RTP_LOCALVIDEO_PORT, RTP_LOCALVIDEO_PORT + 100 );
-    m_tLocalMediaPort.m_dwAudPort = GetIdlePort( dwLocalIP,m_tLocalMediaPort.m_dwVidPort + 2, RTP_LOCALVIDEO_PORT + 200 );
+	return;
+}
 
-    tNetSendMediaPort = m_tLocalMediaPort;
+void CDecoder::SetLocalSendPort(void)
+{
+	if (m_tNetSendPara.m_dwLocalIP == 0)
+	{
+		return;
+	}
 
-    return;
+	m_tNetSendPara.m_dwLocalVidPort = GetIdlePort( ntohl(m_tNetSendPara.m_dwLocalIP),
+		RTP_LOCALVIDEO_PORT, RTP_LOCALVIDEO_PORT + 100 );
+	m_tNetSendPara.m_dwLocalAudPort = GetIdlePort( ntohl(m_tNetSendPara.m_dwLocalIP),
+		m_tNetSendPara.m_dwLocalVidPort + 2, RTP_LOCALVIDEO_PORT + 200 );
+
+	return;
+}
+
+void CDecoder::SetRemoteSendPort(u32 dwRemoteVidPort, u32 dwRemoteAudPort)
+{
+	m_tNetSendPara.m_dwRemoteVidPort = dwRemoteVidPort;
+	m_tNetSendPara.m_dwRemoteAudPort = dwRemoteAudPort;
+
+	return;
+}
+
+void CDecoder::GetNetSendPara(NetSendPara &tNetSendPara)
+{
+	tNetSendPara = m_tNetSendPara;
+	return;
 }
 
 void  CDecoder::SetVideoBackParam( u16 wRTPVedioPort, u32 dwRTPVedioAddr )

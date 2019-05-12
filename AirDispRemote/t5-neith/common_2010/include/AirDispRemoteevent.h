@@ -53,7 +53,7 @@ enum EmUiRkcMsg
 // osp event
 enum EMNvmpAppMsgSegs
 {
-    EV_NVMPAPP_REGISTER_REQ = 61012,        //注册请求
+    EV_NVMPAPP_CONNECT_REQ = 61012,        //注册请求
     EV_NVMPAPP_REGISTER_RSP,                //注册回复
     EV_NVMPAPP_VIEWQKSHARE_Cmd,             //投屏请求  BOOL32
     EV_NVMPAPP_VIEWQKSHARE_Ntf,             //投屏结果通知 BOOL32

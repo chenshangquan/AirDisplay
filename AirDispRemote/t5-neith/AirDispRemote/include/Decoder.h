@@ -105,7 +105,12 @@ public:
     //  dwRTPAddr和dwRTCPAddr值是一样的，都是本地地址 
     void SetWnd(HWND hwndPlay);
     void SetInfo(u16 wVRTPPort, u16 wARTPPort, u32 dwRTPAddr, u32 dwRTCPAddr);
-    void GetLocalMediaTransPort(NetSendMediaPort &tNetSendMediaPort);
+
+	void SetNetSendIP(u32 dwLocalIP, u32 dwRemoteIP);
+	void SetLocalSendPort(void);
+	void SetRemoteSendPort(u32 dwRemoteVidPort, u32 dwRemoteAudPort);
+	void GetNetSendPara(NetSendPara &tNetSendPara);
+
     void SetVideoBackParam( u16 wRTPVedioPort, u32 dwRTPVedioAddr );
     void SetAudioBackParam(  u16 wRTPAudioPort, u32 dwRTPAudioAddr  );
     void StartPlay();
@@ -175,8 +180,7 @@ private:
     s16             m_hTimerAskKeyFrmForce;// //强制请求关键帧，一般用于刚开启解码器，连续请求3次关键帧 PS:由于解码器还未稳定是否需要关键帧状态还不准确
 
     // 网络发送参数
-    NetSendMediaPort m_tLocalMediaPort;
-    NetSendMediaPort m_tRemoteMediaPort;
+    NetSendPara m_tNetSendPara;
 };
 
 

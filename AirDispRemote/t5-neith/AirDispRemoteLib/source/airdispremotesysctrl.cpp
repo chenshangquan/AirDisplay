@@ -3,7 +3,6 @@
 #include "AirDispRemoteevent.h"
 //#include "socketmanager.h"
 #include "AirDispRemoteprintctrl.h"
-#include ""
 
 CAirDispRemoteSysCtrl::CAirDispRemoteSysCtrl(CAirDispRemoteSession &cSession) : CAirDispRemoteSysCtrlIF()
 {
@@ -29,27 +28,29 @@ u16 CAirDispRemoteSysCtrl::CloseSocket()
 
 void CAirDispRemoteSysCtrl::BuildEventsMap()
 {
-    REG_PFUN(EV_NVMPAPP_REGISTER_REQ, CAirDispRemoteSysCtrl::OnRegister);
+    REG_PFUN(EV_NVMPAPP_CONNECT_REQ, CAirDispRemoteSysCtrl::OnConnected);
     REG_PFUN(EV_NVMPAPP_VIEWQKSHARE_Cmd, CAirDispRemoteSysCtrl::OnStartViewShare);
 }
 
-void CAirDispRemoteSysCtrl::OnRegister(const CMessage& cMsg)
+void CAirDispRemoteSysCtrl::OnConnected(const CMessage& cMsg)
 {
     if ( NULL == cMsg.content )
     {
         return;
     }
 
-    NetSendMediaPort tRemoteMediaPort = *(NetSendMediaPort*)(cMsg.content);
+    NetSendPara tNetSendPara = *(NetSendPara*)(cMsg.content);
     
-    PostEvent( UI_AIRDISPREMOTE_MEDIAPORT, tRemoteMediaPort.m_dwVidPort, tRemoteMediaPort.m_dwAudPort );
-    PrtAirDispRemoteMsg("Rec NetSend Media TransPoart.\r\n");
+	PostEvent( UI_AIRDISPREMOTE_CONNECTED, tNetSendPara.m_dwLocalIP, tNetSendPara.m_dwRemoteIP );
+    PostEvent( UI_AIRDISPREMOTE_MEDIAPORT, tNetSendPara.m_dwRemoteVidPort, tNetSendPara.m_dwRemoteAudPort );
+    PrtAirDispRemoteMsg("Rec NetSend Media Trans IP Address.\r\n");
     CAirDispRemoteMsgDriver::s_pMsgDriver->SetNodeId(cMsg.srcnode);
 
 }
 
 void CAirDispRemoteSysCtrl::OnStartViewShare(const CMessage& cMsg)
 {
+#if 0
     BOOL32 bTPStart = *(BOOL32*)(cMsg.content);
     PrtAirDispRemoteMsg("bTPStart:%d\r\n", bTPStart);
 
@@ -69,6 +70,7 @@ void CAirDispRemoteSysCtrl::OnStartViewShare(const CMessage& cMsg)
             SOCKETWORK->CloseSocket();
         }
     }
+#endif
 }
 
 void CAirDispRemoteSysCtrl::OnDicconnected(const CMessage& cMsg)
