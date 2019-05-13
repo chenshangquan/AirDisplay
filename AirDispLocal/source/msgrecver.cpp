@@ -37,10 +37,13 @@ CMsgHandler::~CMsgHandler()
     s_pMsgHandler = NULL;
 }
 
-void CMsgHandler::RegisterRspHandle(CMessage *const pMsg)
+void CMsgHandler::ConnectRspHandle(CMessage *const pMsg)
 {
-    PRINTMSG_TIME("EV_NVMPAPP_REGISTER_RSP, SUCCESSFUL.\r\n");
-    SendMessage(g_dlg->m_pcMainDlg->GetSafeHwnd(), WM_REGISTER_SUCCEED, 0, 0);
+    NetSendMediaPort tNetSendMediaPort = *(NetSendMediaPort*)(pMsg->content);
+
+    PRINTMSG_TIME("EV_NVMPAPP_CONNECT_RSP:m_dwVidPort = %d, m_dwAudPort = %d.\r\n",
+        tNetSendMediaPort.m_dwVidPort, tNetSendMediaPort.m_dwAudPort);
+    SendMessage(g_dlg->m_pcMainDlg->GetSafeHwnd(), WM_CONNECT_SUCCEED, tNetSendMediaPort.m_dwVidPort, tNetSendMediaPort.m_dwAudPort);
     return;
 }
 
@@ -87,9 +90,9 @@ void CMsgHandler::InstanceEntry(CMessage *const pMsg)
     // 根据不同的消息类型进行处理;
     switch (wCurEvent)
     {
-    case EV_NVMPAPP_REGISTER_RSP:
+    case EV_NVMPAPP_CONNECT_RSP:
         //注册回复
-        RegisterRspHandle(pMsg);
+        ConnectRspHandle(pMsg);
         break;
     case EV_NVMPAPP_VIEWQKSHARE_Ntf:
         //投屏结果通知 BOOL32

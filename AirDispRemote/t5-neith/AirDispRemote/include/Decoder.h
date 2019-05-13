@@ -27,7 +27,7 @@
 #pragma comment(lib, "kdvmedianetdll.lib")
 #pragma comment(lib, "mediasdkvc10.lib")
 
-#define RTP_LOCALVIDEO_PORT 10000       // Local video trans port
+#define RTP_LOCALVIDEO_PORT 8100       // Local video trans port
 
 typedef struct tagMediaParam
 {
@@ -107,8 +107,10 @@ public:
     void SetInfo(u16 wVRTPPort, u16 wARTPPort, u32 dwRTPAddr, u32 dwRTCPAddr);
 
 	void SetNetSendIP(u32 dwLocalIP, u32 dwRemoteIP);
-	void SetLocalSendPort(void);
-	void SetRemoteSendPort(u32 dwRemoteVidPort, u32 dwRemoteAudPort);
+	void SetLocalMediaSendPort(void);
+    void GetLocalMediSendPort(NetSendMediaPort &tNetSendMediaPort);
+	void SetRemoteMediaSendPort(u32 dwRemoteVidPort, u32 dwRemoteAudPort);
+    void SetNetSendPara(void);
 	void GetNetSendPara(NetSendPara &tNetSendPara);
 
     void SetVideoBackParam( u16 wRTPVedioPort, u32 dwRTPVedioAddr );

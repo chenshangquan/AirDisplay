@@ -19,7 +19,7 @@ APP_BEGIN_MSG_MAP(CMenuLogic, CNotifyUIImpl)
 
     MSG_TIMER(_T("LoginTipLeb"), OnShowTipTimer)
 
-    USER_MSG(UI_AIRDISPREMOTE_CONNECTED , OnAirDispRemoteConnected)
+    //USER_MSG(UI_AIRDISPREMOTE_CONNECTED , OnAirDispRemoteConnected)
     //USER_MSG(UI_RKC_DISCONNECTED , OnAirDispRemoteDisconnected)
 APP_END_MSG_MAP()
 

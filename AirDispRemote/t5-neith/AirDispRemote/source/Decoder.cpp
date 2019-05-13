@@ -162,7 +162,7 @@ void CDecoder::SetNetSendIP(u32 dwLocalIP, u32 dwRemoteIP)
 	return;
 }
 
-void CDecoder::SetLocalSendPort(void)
+void CDecoder::SetLocalMediaSendPort(void)
 {
 	if (m_tNetSendPara.m_dwLocalIP == 0)
 	{
@@ -177,12 +177,58 @@ void CDecoder::SetLocalSendPort(void)
 	return;
 }
 
-void CDecoder::SetRemoteSendPort(u32 dwRemoteVidPort, u32 dwRemoteAudPort)
+void CDecoder::GetLocalMediSendPort(NetSendMediaPort &tNetSendMediaPort)
+{
+    SetLocalMediaSendPort();
+
+    tNetSendMediaPort.m_dwVidPort = m_tNetSendPara.m_dwLocalVidPort;
+    tNetSendMediaPort.m_dwAudPort = m_tNetSendPara.m_dwLocalAudPort;
+
+    return;
+}
+
+void CDecoder::SetRemoteMediaSendPort(u32 dwRemoteVidPort, u32 dwRemoteAudPort)
 {
 	m_tNetSendPara.m_dwRemoteVidPort = dwRemoteVidPort;
 	m_tNetSendPara.m_dwRemoteAudPort = dwRemoteAudPort;
 
 	return;
+}
+
+void CDecoder::SetNetSendPara(void)
+{
+    u32 dwLocalPort  = m_tNetSendPara.m_dwLocalVidPort;
+    u32 dwRemotePort = m_tNetSendPara.m_dwRemoteVidPort;
+
+    in_addr inaddrLocal;
+    inaddrLocal.s_addr = m_tNetSendPara.m_dwLocalIP;
+    s8* pLocalIP  = inet_ntoa(inaddrLocal);
+    s8 achLocalIP[16] = {0};
+    strcpy(achLocalIP, pLocalIP);
+
+    in_addr inaddrRemote;
+    inaddrRemote.s_addr = m_tNetSendPara.m_dwRemoteIP;
+    s8* pRemoteIP  = inet_ntoa(inaddrRemote);
+    s8 achRemoteIP[16] = {0};
+    strcpy(achRemoteIP, pRemoteIP);
+
+
+
+    /*s8* pLocalIP = (s8*)"172.16.160.113";
+    s8* pRemoteIP = (s8*)"192.169.0.175";*/
+
+    m_tVideoNetParam.m_byRemoteNum = 1;
+    OSP_SET_NETADDR_PORT(&m_tVideoNetParam.m_tLocalNet.tRTPAddr, AF_INET, dwLocalPort);
+    OSP_SET_NETADDR_PORT(&m_tVideoNetParam.m_tLocalNet.tRTCPAddr, AF_INET, dwLocalPort + 1);
+    OSP_SET_NETADDR_ADDR_STR(&(m_tVideoNetParam.m_tLocalNet.tRTPAddr), AF_INET,  achLocalIP);
+    OSP_SET_NETADDR_ADDR_STR(&(m_tVideoNetParam.m_tLocalNet.tRTCPAddr), AF_INET, achLocalIP);
+
+    OSP_SET_NETADDR_ADDR_STR(&(m_tVideoNetParam.m_tRemoteNet[0].tRTPAddr), AF_INET,  achRemoteIP);
+    OSP_SET_NETADDR_ADDR_STR(&(m_tVideoNetParam.m_tRemoteNet[0].tRTCPAddr), AF_INET, achRemoteIP);
+    OSP_SET_NETADDR_PORT(&m_tVideoNetParam.m_tRemoteNet[0].tRTPAddr, AF_INET, dwRemotePort);
+    OSP_SET_NETADDR_PORT(&m_tVideoNetParam.m_tRemoteNet[0].tRTCPAddr, AF_INET, dwRemotePort + 1);
+
+    return;
 }
 
 void CDecoder::GetNetSendPara(NetSendPara &tNetSendPara)

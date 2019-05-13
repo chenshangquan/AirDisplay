@@ -42,6 +42,10 @@ public:
 	*   连接断开
 	*/ 
     u16 CloseLink();
+    /**
+	*   发送本地网络媒体码流端口
+	*/ 
+    u16 SendLocalMediaPort(u32 dwLocalVidPort, u32 dwLocalAudPort); 
 
     
 

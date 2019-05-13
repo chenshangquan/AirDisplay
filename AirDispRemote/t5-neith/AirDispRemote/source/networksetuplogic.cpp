@@ -4,7 +4,7 @@
 template<> CNetworkSetupLogic* Singleton<CNetworkSetupLogic>::ms_pSingleton  = NULL;
 
 APP_BEGIN_MSG_MAP(CNetworkSetupLogic, CNotifyUIImpl)
-    USER_MSG(UI_AIRDISPREMOTE_CONNECTED , OnAirDispRemoteConnected)
+    //USER_MSG(UI_AIRDISPREMOTE_CONNECTED , OnAirDispRemoteConnected)
 APP_END_MSG_MAP()
 
     CNetworkSetupLogic::CNetworkSetupLogic()

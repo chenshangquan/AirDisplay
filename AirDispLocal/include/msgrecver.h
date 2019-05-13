@@ -6,7 +6,7 @@
 enum EMNvmpAppMsgSegs
 {
     EV_NVMPAPP_CONNECT_REQ = 61012,        //注册请求
-    EV_NVMPAPP_REGISTER_RSP,                //注册回复
+    EV_NVMPAPP_CONNECT_RSP,                //注册回复
     EV_NVMPAPP_VIEWQKSHARE_Cmd,             //投屏请求  BOOL32
     EV_NVMPAPP_VIEWQKSHARE_Ntf,             //投屏结果通知 BOOL32
     EV_NVMPAPP_IMIX_SOCKET_LISTEN_Ntf,      //socket 监听结点通知 u32
@@ -26,7 +26,7 @@ public:
 
 private:
     // 注册回复消息处理
-    void RegisterRspHandle(CMessage *const pMsg);
+    void ConnectRspHandle(CMessage *const pMsg);
     // 投屏结果通知处理
     void ViewQKShareNtfHandle(CMessage *const pMsg);
     // socket 监听结点通知处理

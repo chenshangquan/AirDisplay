@@ -1,0 +1,17 @@
+AirDispLocal/prj_win32/Release/
+AirDispLocal/prj_win32/ipch/
+AirDispLocal/prj_win32/AirDispLocal.sdf
+
+AirDispRemote/10-common/lib/*
+AirDispRemote/t5-neith/duilib/
+AirDispRemote/t5-neith/AirDispRemote/prj_win32/AirDispRemote.sdf
+AirDispRemote/t5-neith/AirDispRemote/prj_win32/ipch/
+AirDispRemote/t5-neith/AirDispRemote/prj_win32/Debug/
+AirDispRemote/t5-neith/AirDispRemote/prj_win32/log/
+
+
+
+
+
+
+

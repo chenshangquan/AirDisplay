@@ -52,3 +52,13 @@ u16 CAirDispRemoteInterface::CloseLink()
 {
     return m_pSysCtrlIf->CloseSocket();
 }
+
+u16 CAirDispRemoteInterface::SendLocalMediaPort(u32 dwLocalVidPort, u32 dwLocalAudPort)
+{
+    if (m_pSysCtrlIf == NULL)
+    {
+        return ERR_AirDispRemote;
+    }
+
+    return m_pSysCtrlIf->SendLocalMediaPort(dwLocalVidPort, dwLocalAudPort);
+}

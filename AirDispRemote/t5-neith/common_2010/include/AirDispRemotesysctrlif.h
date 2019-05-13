@@ -25,7 +25,10 @@ public:
 	*   Socket断开
 	*/ 
     virtual u16 CloseSocket() = 0;
-	
+    /**
+	*   发送本地网络媒体码流端口
+	*/ 
+	virtual u16 SendLocalMediaPort(u32 dwLocalVidPort, u32 dwLocalAudPort) = 0;
 };
 
 #endif __RKCSYSCTRLIF_H__

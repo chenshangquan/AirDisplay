@@ -112,7 +112,7 @@ BEGIN_MESSAGE_MAP(CMainDlg, CBaseDlg)
 	ON_WM_NCHITTEST()
 	ON_NOTIFY(NM_CLICK, IDC_SYSLINK_IGNORE, &CMainDlg::OnNMClickSyslinkIgnore)
 
-    ON_MESSAGE(WM_REGISTER_SUCCEED, &CMainDlg::OnEnableViewQKShare)
+    ON_MESSAGE(WM_CONNECT_SUCCEED, &CMainDlg::OnEnableViewQKShare)
     ON_MESSAGE(WM_VIEW_QK_SHARE_QUIT, &CMainDlg::OnViewQKShareQuit)
     ON_MESSAGE(WM_RECV_IMIX_SOCKET, &CMainDlg::OnRecvImixSocket)
     ON_MESSAGE(WM_VIEW_QK_SHARE_START, &CMainDlg::OnViewQKShareStart)
@@ -291,6 +291,7 @@ void CMainDlg::OnBtnStart()
     BOOL32 bTPStart = TRUE;
     OspPost(MAKEIID(AID_SIPTOOL_APP,0), EV_NVMPAPP_VIEWQKSHARE_Cmd, &bTPStart, sizeof(BOOL32), GetNodeId(), MAKEIID(AID_AIRDIS_APP, 0));
 #else
+    //g_dlg->GetEncode().SetNetSendPara();
     g_dlg->StartProjectScreen();
     // 投屏需请求关键帧，便于解码端立即响应;
     g_dlg->GetEncode().SetAskKeyFrm();
@@ -541,9 +542,14 @@ void CMainDlg::HideUpgradeControlUI()
 
 LRESULT CMainDlg::OnEnableViewQKShare( WPARAM wParam, LPARAM lParam )
 {
+    u32 dwRemoteVidPort = (u32)wParam;
+    u32 dwRemoteAudPort = (u32)lParam;
+    g_dlg->GetEncode().SetRemoteSendPort(dwRemoteVidPort, dwRemoteAudPort);
+
     m_btnServerCnt.EnableWindow(FALSE);
     m_btnStart.EnableWindow(TRUE);
     ShowConnectStatus(NET_STATUS_CONNECTED);
+
     return 0;
 }
 
@@ -577,6 +583,8 @@ LRESULT CMainDlg::OnRecvImixSocket( WPARAM wParam, LPARAM lParam )
 
 LRESULT CMainDlg::OnViewQKShareStart( WPARAM wParam, LPARAM lParam )
 {
+    g_dlg->GetEncode().SetNetSendPara();
+
     g_dlg->StartProjectScreen();
     return 0;
 }

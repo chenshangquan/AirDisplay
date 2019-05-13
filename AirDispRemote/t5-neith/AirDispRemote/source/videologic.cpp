@@ -64,8 +64,6 @@ bool CVideoLogic::OnInit(TNotifyUI& msg)
 
     RegisterRawInputDevices(&rid, 1, sizeof(RAWINPUTDEVICE));*/
 
-    bool bHandle = true;
-    OnShowVideo(1,0,bHandle);
 	return NO_ERROR;
 }
 
@@ -158,11 +156,15 @@ bool CVideoLogic::OnAirDispRemoteMediaPort( WPARAM wparam, LPARAM lparam, bool& 
 {
 	u32 dwRemoteVidPort = (u32)wparam;
 	u32 dwRemoteVudPort = (u32)lparam;
+    m_cDecoder.SetRemoteMediaSendPort(dwRemoteVidPort, dwRemoteVudPort);
+    //m_cDecoder.SetNetSendPara();
 
-	m_cDecoder.SetLocalSendPort();
+    NetSendMediaPort tNetSendMediaPort;
+    m_cDecoder.GetLocalMediSendPort(tNetSendMediaPort);
+    CAirDispRemoteComInterface->SendLocalMediaPort(tNetSendMediaPort.m_dwVidPort, tNetSendMediaPort.m_dwAudPort);
 
-	//CAirDispRemoteMsgDriver::s_pMsgDriver->PostCMsg(EV_NVMPAPP_IMIX_SOCKET_LISTEN_Ntf, &dwSerPort, sizeof(u32));
-
+    bool bHdle = true;
+    OnShowVideo(1,0,bHdle);
 
 	return true;
 }
@@ -512,7 +514,8 @@ void CVideoLogic::InitParam()
 	m_tAudioIpTransAddr.m_tRtpPort.m_wPort = wAudioPort ;
 
 	//设置监控信息接受的端口和Ip地址
-	m_cDecoder.SetInfo(m_tVedioIpTransAddr.m_tRtpPort.m_wPort, m_tAudioIpTransAddr.m_tRtpPort.m_wPort, dwLocalIP , dwLocalIP );
+	//m_cDecoder.SetInfo(m_tVedioIpTransAddr.m_tRtpPort.m_wPort, m_tAudioIpTransAddr.m_tRtpPort.m_wPort, dwLocalIP , dwLocalIP );
+    m_cDecoder.SetNetSendPara();
 	TMediaParam  tMonitorParam;
 	tMonitorParam.abyDynamicPayLoad[0] = MEDIA_TYPE_H264;
 	tMonitorParam.abyDynamicPayLoad[1] = MEDIA_TYPE_MP3;  //MEDIA_TYPE_AACLC

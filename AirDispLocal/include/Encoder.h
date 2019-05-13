@@ -87,7 +87,7 @@ private:
 #define VID_RCV_LOCAL_PORT   8100
 #define VID_RCV_REMOTE_PORT  7300
 
-#define RTP_LOCALVIDEO_PORT 10000
+#define RTP_LOCALVIDEO_PORT 7300
 
 class CEncoder  
 {
@@ -120,6 +120,7 @@ public:
 	void SetNetSendIP(u32 dwLocalIP, u32 dwRemoteIP);
 	void SetLocalSendPort(void);
     void SetRemoteSendPort(u32 dwRemoteVidPort, u32 dwRemoteAudPort);
+    void SetNetSendPara(void);
 	void GetNetSendPara(NetSendPara &tNetSendPara);
 
     void SetNetSndVideoParam();  //设置网络传送参数
