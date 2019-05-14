@@ -7,7 +7,7 @@ const String CSystem::strMainWindow		= _T("AirDispRemote");
 const String CSystem::strSkin			= _T("skin");
 const String CSystem::strDefaultSkin	= _T("skin\\");
 
-const String g_stcStrMainDlg = _T("MainDlg");
+const String g_stcStrMainDlg = _T("AirDispRemote");
 const String g_stcStrNetworkSetupDlg = _T("networksetup");
 const String g_strMessageBoxDlg = _T("MessageBoxDlg");
 const String g_stcStrVideoDlg = _T("VideoWindow");

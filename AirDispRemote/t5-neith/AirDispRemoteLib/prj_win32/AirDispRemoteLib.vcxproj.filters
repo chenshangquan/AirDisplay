@@ -23,9 +23,6 @@
     <ClCompile Include="..\source\kdvdispevent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\source\socketmanager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\source\airdispremotesysctrl.cpp">
       <Filter>Source Files\logic</Filter>
     </ClCompile>
@@ -46,9 +43,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\include\socketmanager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\include\AirDispRemotesysctrl.h">
       <Filter>Header Files\logic</Filter>
     </ClInclude>

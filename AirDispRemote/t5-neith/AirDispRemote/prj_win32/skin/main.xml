@@ -2,10 +2,11 @@
 <Window size="600,450" caption="0,0,0,30" mininfo="400,300" sizebox="4,4,4,4" roundcorner="1,1" bktrans="false" >
 <Font name="宋体" size="12" bold="false" />
 	<!--VerticalLayout name="login" bkimage="res/login/login_bg.png"-->
-	<VerticalLayout name="login" bkcolor="#ffffffff">
+	<VerticalLayout name="login" bkcolor="#ffC0C0C0">
 		<HorizontalLayout height="30">
 			<Control />
 			<Button name="minbtn" width="43" height="28" normalimage="res/login/min_normal.png" hotimage="res/login/min_hover.png" pushedimage="res/login/min_down.png"/>
+			<Button name="maxbtn" width="43" height="28" normalimage="res/login/min_normal.png" hotimage="res/login/min_hover.png" pushedimage="res/login/min_down.png"/>
 			<Button name="closebtn" width="43" height="28" normalimage="res/login/close_normal.png" hotimage="res/login/close_hover.png" pushedimage="res/login/close_down.png"/>
 		</HorizontalLayout>
 		

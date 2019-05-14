@@ -47,6 +47,8 @@ protected:
 
     //点击最小化按钮
     bool OnMinBtnClicked(TNotifyUI& msg);
+    //点击最大化按钮
+    bool OnMaxBtnClicked(TNotifyUI& msg);
     //点击关闭按钮
     bool OnCloseBtnClicked(TNotifyUI& msg);
     //点击登录按钮
@@ -71,6 +73,7 @@ protected:
     APP_DECLARE_MSG_MAP()
 
 private:
+    RECT m_rcParentOld;
 };
 
 #endif // !defined(AFX_LOGINLOGIC_H_)

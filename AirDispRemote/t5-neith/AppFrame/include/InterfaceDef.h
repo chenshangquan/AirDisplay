@@ -116,6 +116,8 @@ public:
     //窗口最小化
     virtual void ShowWindowMinsize(LPCTSTR lpstrName) = 0;
     virtual bool IsWindowMinsize(LPCTSTR lpstrName) = 0;
+    virtual void ShowWindowMaxsize(LPCTSTR lpstrName) = 0;
+    virtual bool IsWindowMaxsize(LPCTSTR lpstrName) = 0;
 	virtual Control* GetControl(LPCTSTR lpstrWindow, LPCTSTR lpstrControl) = 0;
 	virtual Window* NewWindow(LPCTSTR lpstrWindowName, LPCTSTR lpstrWindowMould, HWND hParentWnd, DWORD dwStyle, DWORD dwExStyle,
 								LPVOID lpData = NULL, int x = CW_USEDEFAULT, int y = CW_USEDEFAULT,

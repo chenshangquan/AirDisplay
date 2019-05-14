@@ -43,6 +43,13 @@ enum EmUiRkcMsg
 	ev_UIAirDispRemoteMediaPort,
 #define UI_AIRDISPREMOTE_MEDIAPORT	 ev_UIAirDispRemoteMediaPort
 
+    /************************************************************************/
+	/** ÷ÿ÷√video¥∞ø⁄Œª÷√
+	wParam = 0
+	lparam = 0*/
+	/************************************************************************/
+	ev_UIAirDispRemoteResetVideoPos,
+#define UI_AIRDISPREMOTE_RESETVIDEOPOS	 ev_UIAirDispRemoteResetVideoPos
     
 
     ev_UIRkcEnd,

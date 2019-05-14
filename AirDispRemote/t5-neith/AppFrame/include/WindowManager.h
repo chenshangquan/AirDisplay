@@ -66,6 +66,10 @@ public:
     //窗口最小化
     virtual void ShowWindowMinsize(LPCTSTR lpstrName);
     virtual bool IsWindowMinsize(LPCTSTR lpstrName);
+
+    //窗口最大化
+    virtual void ShowWindowMaxsize(LPCTSTR lpstrName);
+    virtual bool IsWindowMaxsize(LPCTSTR lpstrName);
 protected:
 /** 为窗口添加observer 
  *  @param[in] 

@@ -36,7 +36,8 @@ protected:
 	bool OnDisconnect(WPARAM wParam, LPARAM lParam, bool& bHandle);
 	
 	bool OnAirDispRemoteConnected( WPARAM wparam, LPARAM lparam, bool& bHandle );
-	bool OnAirDispRemoteMediaPort( WPARAM wparam, LPARAM lparam, bool& bHandle );
+    bool OnAirDispRemoteMediaPort( WPARAM wparam, LPARAM lparam, bool& bHandle );
+	bool OnAirDispRemoteResetVideoPos( WPARAM wparam, LPARAM lparam, bool& bHandle );
 
 	//Ë«Á÷ÏìÓ¦
     bool OnShowVideo(WPARAM wParam, LPARAM lParam, bool& bHandle);

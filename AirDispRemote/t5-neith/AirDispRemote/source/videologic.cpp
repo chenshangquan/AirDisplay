@@ -22,7 +22,8 @@ APP_BEGIN_MSG_MAP(CVideoLogic,CNotifyUIImpl)
     USER_MSG(UI_CNS_DISCONNECTED,OnDisconnect)*/
     //USER_MSG(UI_AIRDISPREMOTE_SHOWVIDEO, OnShowVideo)
 	USER_MSG(UI_AIRDISPREMOTE_CONNECTED , OnAirDispRemoteConnected)
-	USER_MSG(UI_AIRDISPREMOTE_MEDIAPORT , OnAirDispRemoteMediaPort)
+    USER_MSG(UI_AIRDISPREMOTE_MEDIAPORT , OnAirDispRemoteMediaPort)
+	USER_MSG(UI_AIRDISPREMOTE_RESETVIDEOPOS , OnAirDispRemoteResetVideoPos)
 APP_END_MSG_MAP()
 
 
@@ -54,7 +55,7 @@ bool CVideoLogic::OnInit(TNotifyUI& msg)
         CPaintManagerUI::GetAdpResolution( &fAdpX, &fAdpY );
         nTop = s32(nTop * fAdpY);
     }
-	SetWindowPos( m_pm->GetPaintWindow(), NULL, 0, nTop, 0, 0, SWP_NOACTIVATE|SWP_NOSIZE);
+	SetWindowPos( m_pm->GetPaintWindow(), NULL, 1, nTop, 0, 0, SWP_NOACTIVATE|SWP_NOSIZE);
 
     /*RAWINPUTDEVICE rid;
     rid.usUsagePage = 0x01;
@@ -93,45 +94,6 @@ bool CVideoLogic::OnHideVideo(TNotifyUI& msg)
 	return true;
 }
 
-void GetLocalIPAddr(u32 &dwLocalIP)
-{
-	WSADATA wsaData;
-	s8 achHost[MAX_PATH + 1] = {0};
-	in_addr tAddr = {0};
-	s32 nIndex = 0;
-
-	// 加载Winsock库;
-	if (::WSAStartup( MAKEWORD(2,0), &wsaData ))
-	{
-		//PRINTMSG("WSAStartup Failed!!\r\n");
-		return;
-	}
-
-	::gethostname(achHost, MAX_PATH);
-	hostent *pHost = ::gethostbyname(achHost);
-	if (pHost == NULL)
-	{
-		//PRINTMSG("Get Host Content Failed!!\r\n");
-		return;
-	}
-
-	// 获取本机第一个IP地址;
-	for (nIndex = 0;;nIndex++)
-	{
-		s8 *pAddr = pHost->h_addr_list[nIndex];
-		if (pAddr != NULL)
-		{
-			memcpy(&tAddr.S_un.S_addr, pAddr, pHost->h_length);
-			break;
-		}
-	}
-
-	dwLocalIP = inet_addr(::inet_ntoa(tAddr));
-	::WSACleanup();
-
-	return;
-}
-
 bool CVideoLogic::OnAirDispRemoteConnected( WPARAM wparam, LPARAM lparam, bool& bHandle )
 {
 	//m_pm->DoCase(_T("caseNormal"));
@@ -139,15 +101,6 @@ bool CVideoLogic::OnAirDispRemoteConnected( WPARAM wparam, LPARAM lparam, bool& 
 	u32 dwRemoteIP = (u32)wparam;
 	u32 dwLocalIP = (u32)lparam;
 	m_cDecoder.SetNetSendIP(dwLocalIP, dwRemoteIP);
-
-	//u32 dwLocalIP = 0;
-	//GetLocalIPAddr(dwLocalIP);
-	//if (dwLocalIP == 0)
-	//{
-	//	// print
-	//	return false;
-	//}
-
 
 	return true;
 }
@@ -169,6 +122,19 @@ bool CVideoLogic::OnAirDispRemoteMediaPort( WPARAM wparam, LPARAM lparam, bool& 
 	return true;
 }
 
+bool CVideoLogic::OnAirDispRemoteResetVideoPos( WPARAM wparam, LPARAM lparam, bool& bHandle )
+{
+    s32 nTop = 30;
+    if ( CPaintManagerUI::IsSelfAdaption() )
+    {
+        float fAdpX, fAdpY;
+        CPaintManagerUI::GetAdpResolution( &fAdpX, &fAdpY );
+        nTop = s32(nTop * fAdpY);
+    }
+    SetWindowPos( m_pm->GetPaintWindow(), NULL, 1, nTop, 0, 0, SWP_NOACTIVATE|SWP_NOSIZE);
+
+    return true;
+}
 
 bool CVideoLogic::OnShowVideo(WPARAM wParam, LPARAM lParam, bool& bHandle)
 {

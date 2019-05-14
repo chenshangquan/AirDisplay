@@ -2,7 +2,7 @@
 //#include "kdvtype.h"
 //#include "rkconst.h"
 //#include <stdio.h>  
-//#include <winsock2.h>
+#include <winsock2.h>
 //#include <queue>
 
 //#pragma comment(lib,"ws2_32.lib")

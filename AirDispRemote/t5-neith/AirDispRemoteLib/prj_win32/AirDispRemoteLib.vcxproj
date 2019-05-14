@@ -89,14 +89,12 @@
     <ClCompile Include="..\source\airdispremoteprintctrl.cpp" />
     <ClCompile Include="..\source\airdispremotesession.cpp" />
     <ClCompile Include="..\source\airdispremotesysctrl.cpp" />
-    <ClCompile Include="..\source\socketmanager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\AirDispRemotemsgdriver.h" />
     <ClInclude Include="..\include\airdispremotemsgrecver.h" />
     <ClInclude Include="..\include\airdispremotesession.h" />
     <ClInclude Include="..\include\AirDispRemotesysctrl.h" />
-    <ClInclude Include="..\include\socketmanager.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

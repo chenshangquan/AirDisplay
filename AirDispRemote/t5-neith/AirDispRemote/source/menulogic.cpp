@@ -14,6 +14,7 @@ APP_BEGIN_MSG_MAP(CMenuLogic, CNotifyUIImpl)
     MSG_WINDOWSIZE(_T("login"), OnSize)
 
     MSG_CLICK(_T("minbtn"), OnMinBtnClicked)
+    MSG_CLICK(_T("maxbtn"), OnMaxBtnClicked)
     MSG_CLICK(_T("closebtn"), OnCloseBtnClicked)
     MSG_CLICK(_T("LoginBtn"), OnLoginBtnClicked)
 
@@ -69,7 +70,26 @@ bool CMenuLogic::OnSize( TNotifyUI& msg )
     GetWindowRect(m_pm->GetPaintWindow(),&rcParent);
 
     if (WINDOW_MGR_PTR->GetWindow( g_stcStrVideoDlg.c_str()))
-        WINDOW_MGR_PTR->GetWindow( g_stcStrVideoDlg.c_str())->ResizeClient(rcParent.right-rcParent.left, rcParent.bottom-rcParent.top-60);
+        WINDOW_MGR_PTR->GetWindow( g_stcStrVideoDlg.c_str())->ResizeClient(rcParent.right-rcParent.left-2, rcParent.bottom-rcParent.top-60);
+    return true;
+}
+
+bool CMenuLogic::OnMaxBtnClicked(TNotifyUI& msg)
+{
+    if ( WINDOW_MGR_PTR->IsWindowMaxsize( g_stcStrMainDlg.c_str() ) )
+    {
+        SetWindowPos( m_pm->GetPaintWindow(), NULL, m_rcParentOld.left, m_rcParentOld.top, m_rcParentOld.right-m_rcParentOld.left, m_rcParentOld.bottom-m_rcParentOld.top, SWP_NOACTIVATE );
+        if (WINDOW_MGR_PTR->GetWindow( g_stcStrVideoDlg.c_str()))
+            WINDOW_MGR_PTR->GetWindow( g_stcStrVideoDlg.c_str())->ResizeClient(m_rcParentOld.right-m_rcParentOld.left-2, m_rcParentOld.bottom-m_rcParentOld.top-60);
+        SendMessage(m_pm->GetPaintWindow(),WM_PAINT,0,0);
+    }
+    else
+    {
+        GetWindowRect(m_pm->GetPaintWindow(),&m_rcParentOld);
+        WINDOW_MGR_PTR->ShowWindowMaxsize(g_stcStrMainDlg.c_str());
+    }
+    NOTIFY_MSG( UI_AIRDISPREMOTE_RESETVIDEOPOS, 0 , 0 );
+
     return true;
 }
 

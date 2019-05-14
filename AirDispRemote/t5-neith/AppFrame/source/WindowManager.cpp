@@ -415,4 +415,23 @@ bool CWindowManager::IsWindowMinsize(LPCTSTR lpstrName)
     return false;
 }
 
+void CWindowManager::ShowWindowMaxsize(LPCTSTR lpstrName)
+{
+    Window *pWnd = GetWindow(lpstrName);
+    if (pWnd != NULL)
+    {
+        ::ShowWindow(pWnd->GetHWND(),SW_MAXIMIZE);
+    }
+}
+
+bool CWindowManager::IsWindowMaxsize(LPCTSTR lpstrName)
+{
+    Window *pWnd = GetWindow(lpstrName);
+    if (pWnd != NULL)
+    {
+        return ::IsZoomed(pWnd->GetHWND());
+    }
+    return false;
+}
+
 } // namespace AppFrame end 
