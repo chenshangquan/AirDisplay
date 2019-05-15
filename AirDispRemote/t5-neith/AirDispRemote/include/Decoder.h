@@ -113,6 +113,9 @@ public:
     void SetNetSendPara(void);
 	void GetNetSendPara(NetSendPara &tNetSendPara);
 
+    void SetNetSndVideoParam();  //设置网络视频传送参数
+    void SetNetSndAudioParam();  //设置网络音频传送参数
+
     void SetVideoBackParam( u16 wRTPVedioPort, u32 dwRTPVedioAddr );
     void SetAudioBackParam(  u16 wRTPAudioPort, u32 dwRTPAudioAddr  );
     void StartPlay();

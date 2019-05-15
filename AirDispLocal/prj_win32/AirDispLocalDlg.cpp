@@ -1371,7 +1371,7 @@ void CAirDispLocalDlg::OnDestroy()
 //桌面抓取初始化
 void CAirDispLocalDlg::InitEncoderParam()
 {
-	InitAudioEncoderParam(AUDIO_MODE_BEST);
+	InitAudioEncoderParam(AUDIO_MODE_IBLC);
 	
 	/*m_cEncoder.SetDeskSharedVidCallback(&CapScreenVidStart, 0);
 	m_cEncoder.SetDeskSharedAudCallback(&CapScreenAudStart, 0);
@@ -1986,7 +1986,7 @@ void CAirDispLocalDlg::StartProjectScreen()
 		//设置音量控制
 		InitVolumeCtrl();
         //停止投屏时该标志位会被清空，需要重新初始化
-        InitAudioEncoderParam(AUDIO_MODE_BEST);
+        InitAudioEncoderParam(AUDIO_MODE_IBLC);
 
 		m_bIsProjecting = true;
 		bFirstKeyFrame = FALSE;

@@ -46,7 +46,7 @@ CDecoder::CDecoder()
     m_hFullScreenDlg = NULL;
     
     m_bAudio = TRUE;
-    m_emMediaMode = emTPMediaVideo;
+    m_emMediaMode = emTPMediaAV;
     ZeroMemory(&m_tVideoNetParam, sizeof(TMnetNetParam));
     ZeroMemory(&m_tAudioNetParam, sizeof(TMnetNetParam));
     ZeroMemory(&m_tAudioAACParam, sizeof(TAudAACParam));
@@ -197,6 +197,20 @@ void CDecoder::SetRemoteMediaSendPort(u32 dwRemoteVidPort, u32 dwRemoteAudPort)
 
 void CDecoder::SetNetSendPara(void)
 {
+    SetNetSndVideoParam();
+    SetNetSndAudioParam();
+
+    return;
+}
+
+void CDecoder::GetNetSendPara(NetSendPara &tNetSendPara)
+{
+	tNetSendPara = m_tNetSendPara;
+	return;
+}
+
+void CDecoder::SetNetSndVideoParam()
+{
     u32 dwLocalPort  = m_tNetSendPara.m_dwLocalVidPort;
     u32 dwRemotePort = m_tNetSendPara.m_dwRemoteVidPort;
 
@@ -212,11 +226,6 @@ void CDecoder::SetNetSendPara(void)
     s8 achRemoteIP[16] = {0};
     strcpy(achRemoteIP, pRemoteIP);
 
-
-
-    /*s8* pLocalIP = (s8*)"172.16.160.113";
-    s8* pRemoteIP = (s8*)"192.169.0.175";*/
-
     m_tVideoNetParam.m_byRemoteNum = 1;
     OSP_SET_NETADDR_PORT(&m_tVideoNetParam.m_tLocalNet.tRTPAddr, AF_INET, dwLocalPort);
     OSP_SET_NETADDR_PORT(&m_tVideoNetParam.m_tLocalNet.tRTCPAddr, AF_INET, dwLocalPort + 1);
@@ -231,10 +240,56 @@ void CDecoder::SetNetSendPara(void)
     return;
 }
 
-void CDecoder::GetNetSendPara(NetSendPara &tNetSendPara)
+void CDecoder::SetNetSndAudioParam()
 {
-	tNetSendPara = m_tNetSendPara;
-	return;
+    u32 dwLocalPort  = m_tNetSendPara.m_dwLocalAudPort;
+    u32 dwRemotePort = m_tNetSendPara.m_dwRemoteAudPort;
+
+    in_addr inaddrLocal;
+    inaddrLocal.s_addr = m_tNetSendPara.m_dwLocalIP;
+    s8* pLocalIP  = inet_ntoa(inaddrLocal);
+    s8 achLocalIP[16] = {0};
+    strcpy(achLocalIP, pLocalIP);
+
+    in_addr inaddrRemote;
+    inaddrRemote.s_addr = m_tNetSendPara.m_dwRemoteIP;
+    s8* pRemoteIP  = inet_ntoa(inaddrRemote);
+    s8 achRemoteIP[16] = {0};
+    strcpy(achRemoteIP, pRemoteIP);
+
+    m_tAudioNetParam.m_byRemoteNum = 1;
+    OSP_SET_NETADDR_PORT(&m_tAudioNetParam.m_tLocalNet.tRTPAddr, AF_INET, dwLocalPort);
+    OSP_SET_NETADDR_PORT(&m_tAudioNetParam.m_tLocalNet.tRTCPAddr, AF_INET, dwLocalPort + 1);
+    OSP_SET_NETADDR_ADDR_STR(&(m_tAudioNetParam.m_tLocalNet.tRTPAddr), AF_INET,  achLocalIP);
+    OSP_SET_NETADDR_ADDR_STR(&(m_tAudioNetParam.m_tLocalNet.tRTCPAddr), AF_INET, achLocalIP);
+
+    OSP_SET_NETADDR_ADDR_STR(&(m_tAudioNetParam.m_tRemoteNet[0].tRTPAddr), AF_INET,  achRemoteIP);
+    OSP_SET_NETADDR_ADDR_STR(&(m_tAudioNetParam.m_tRemoteNet[0].tRTCPAddr), AF_INET, achRemoteIP);
+    OSP_SET_NETADDR_PORT(&m_tAudioNetParam.m_tRemoteNet[0].tRTPAddr, AF_INET, dwRemotePort);
+    OSP_SET_NETADDR_PORT(&m_tAudioNetParam.m_tRemoteNet[0].tRTCPAddr, AF_INET, dwRemotePort + 1);
+
+    u32 dwRet = 0;
+    u8	byAudioMode = AUDIO_MODE_IBLC;//AUDIO_MODE_OPUS;
+    m_pcDecoder->SetAudioDecType(MEDIA_TYPE_RED, byAudioMode);
+
+    u32 dwIndex = 0;
+    u32 dwDevNum = 0;
+    vector<TDevNameInfo> tOutDevList;
+    m_pcDecoder->RefreshPlayDevList(tOutDevList, dwDevNum);
+    if (dwDevNum >= 1)
+    {
+        dwRet = m_pcDecoder->SelectAudioPlayDev( (const wchar_t*)(tOutDevList[dwIndex].m_achDevName), (const wchar_t*)(tOutDevList[dwIndex].m_achDevGUID) );
+    }
+    else
+    {
+        //printf("RefreshPlayDevList failure \n");
+        dwRet = m_pcDecoder->SelectAudioPlayDev(NULL, NULL);
+    }	
+    if (dwRet)
+    {
+        //printf("SelectAudioPlayDev failure \n");
+        exit(EXIT_FAILURE);
+    }
 }
 
 void  CDecoder::SetVideoBackParam( u16 wRTPVedioPort, u32 dwRTPVedioAddr )
@@ -289,9 +344,6 @@ void CDecoder::SetVideoParam(const TMediaParam& tMonitorParam )
 	m_pcDecoder->SetAudioActivePT( tMonitorParam.abyDynamicPayLoad[1],
 		tMonitorParam.abyRealType[1]);
 
- 
- 
- 	
   	if( tMonitorParam.abyRealType[1] == MEDIA_TYPE_G7221C)//这里的G7221就是G7221c
     {
   	    
@@ -312,14 +364,13 @@ void CDecoder::SetVideoParam(const TMediaParam& tMonitorParam )
 	else
 	{
 		//byEncryptMode = AES_ENCRYPT_MODE;
-		m_pcDecoder->SetVidDecryptKey(NULL,0, 0);
+		m_pcDecoder->SetVidDecryptKey(NULL, 0, 0);
 		m_pcDecoder->SetAudDecryptKey(NULL, 0, 0);
 	}
 }
 
 void CDecoder::StartPlay()
-{    
-
+{
 	StartDec(); 
     AskKeyFrame( TRUE );
 	m_bPlayed = TRUE;
@@ -351,6 +402,7 @@ void CDecoder::StartDec()
 		PlayAudio();
 	}
 }
+
 void CDecoder::StopPlay()
 {   
     KillTimer( NULL, m_hTimerAskKeyFrm );
@@ -360,6 +412,7 @@ void CDecoder::StopPlay()
 	m_bPlayed = FALSE;
     m_bKeyFrame = FALSE;
 }
+
 void CDecoder::StopDec()
 {
 	if (m_pcDecoder == NULL) 
@@ -447,16 +500,12 @@ void CDecoder::StopAudio()
 	m_pcDecoder->StopRcvAudio();
 	m_pcDecoder->StopAudioDec();
 }
- 
- 
- 
 
 BOOL CDecoder::IsPlayed()
 {
     return m_bPlayed;
 }
 
- 
 u16 CDecoder::SetOnlyKeyFrame(BOOL bKeyFrame)
 {
     u16 wResult = m_pcDecoder->SetOnlyKeyFrame(bKeyFrame);
@@ -467,7 +516,6 @@ u16 CDecoder::SetOnlyKeyFrame(BOOL bKeyFrame)
     return wResult;
 }
 
-  
 void CDecoder::InitDecoder()
 {
 	if(!m_pcDecoder)
@@ -569,7 +617,6 @@ void CDecoder::SetDecryptKey( s8 *pszKeyBuf, u16 wKeySize, u8 byDecryptMode )
 	m_pcDecoder->SetAudDecryptKey( pszKeyBuf, wKeySize, byDecryptMode );
 }
 
-
 CKdvDecoder* CDecoder::GetDecoder()
 {
 	if ( m_pcDecoder != NULL )
@@ -580,8 +627,6 @@ CKdvDecoder* CDecoder::GetDecoder()
 		return NULL;
 }
 
-
- 
 void CDecoder::SendError()
 {//还要不要 dyy
 //     u32 dwError = 0;
@@ -604,10 +649,11 @@ u16   CDecoder::SetAudioVolume(u8 byVolume )   /*设置输出声音音量*/
 {
     return m_pcDecoder->SetAudioVolume(byVolume);
 }
+
 u16    CDecoder::GetAudioVolume(u8 &pbyVolume ) /*得到输出声音音量*/
 {
     return m_pcDecoder->GetAudioVolume(pbyVolume);
-}	
+}
 
 void CDecoder::AskKeyFrame( BOOL32 bForce )
 {   
@@ -619,7 +665,6 @@ void CDecoder::AskKeyFrame( BOOL32 bForce )
     }
     m_hTimerAskKeyFrmForce = SetTimer(NULL,0, DEC_CHECK_KEY_FRSME_ELAPS,CBTimerPocCBTimerPoc);
 }
-
 
 // BOOL32 CDecoder::SetStaticPicturePath( CString strImgPath)
 // {
@@ -698,7 +743,7 @@ void CDecoder::OAskKeyFrame( UINT timerID )
 void CDecoder::SetNetRcvParam()
 {
 	m_pcDecoder->SetVideoNetRcvParam(&m_tVideoNetParam);
-	//m_pcDecoder->SetAudioNetRcvParam(&m_tAudioNetParam);	
+	m_pcDecoder->SetAudioNetRcvParam(&m_tAudioNetParam);	
 }
 
 void CDecoder::SetVidDecZoomPolicy( enZoomMode emZoomMode )

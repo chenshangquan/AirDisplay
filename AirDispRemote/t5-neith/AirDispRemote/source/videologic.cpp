@@ -29,10 +29,10 @@ APP_END_MSG_MAP()
 
 CVideoLogic::CVideoLogic(void)
 {
-	m_bRecvStream = FALSE;
-	m_bDecod = FALSE;
-	m_bFullScreen = FALSE;
-	m_bIsClkBtn = FALSE;
+	//m_bRecvStream = FALSE;
+	//m_bDecod = FALSE;
+	//m_bFullScreen = FALSE;
+	//m_bIsClkBtn = FALSE;
 	m_cDecoder.SetAudioVolume( 255 );
 }
 
@@ -57,21 +57,13 @@ bool CVideoLogic::OnInit(TNotifyUI& msg)
     }
 	SetWindowPos( m_pm->GetPaintWindow(), NULL, 1, nTop, 0, 0, SWP_NOACTIVATE|SWP_NOSIZE);
 
-    /*RAWINPUTDEVICE rid;
-    rid.usUsagePage = 0x01;
-    rid.usUsage = 0x06;
-    rid.dwFlags = RIDEV_INPUTSINK;
-    rid.hwndTarget = m_pm->GetPaintWindow();
-
-    RegisterRawInputDevices(&rid, 1, sizeof(RAWINPUTDEVICE));*/
-
 	return NO_ERROR;
 }
 
 bool CVideoLogic::OnDisconnect(WPARAM wParam, LPARAM lParam, bool& bHandle)
 {
-	m_bRecvStream = FALSE;
-	m_bDecod = FALSE;
+	//m_bRecvStream = FALSE;
+	//m_bDecod = FALSE;
 
 	TNotifyUI msg;
 	OnHideVideo(msg);
@@ -89,7 +81,7 @@ bool CVideoLogic::OnHideVideo(TNotifyUI& msg)
 	}
 
 	m_cDecoder.StopPlay();
-	m_bDecod = FALSE;
+	//m_bDecod = FALSE;
 	WINDOW_MGR_PTR->ShowWindow( g_stcStrVideoDlg.c_str(), false );
 	return true;
 }
@@ -108,8 +100,8 @@ bool CVideoLogic::OnAirDispRemoteConnected( WPARAM wparam, LPARAM lparam, bool& 
 bool CVideoLogic::OnAirDispRemoteMediaPort( WPARAM wparam, LPARAM lparam, bool& bHandle )
 {
 	u32 dwRemoteVidPort = (u32)wparam;
-	u32 dwRemoteVudPort = (u32)lparam;
-    m_cDecoder.SetRemoteMediaSendPort(dwRemoteVidPort, dwRemoteVudPort);
+	u32 dwRemoteAudPort = (u32)lparam;
+    m_cDecoder.SetRemoteMediaSendPort(dwRemoteVidPort, dwRemoteAudPort);
     //m_cDecoder.SetNetSendPara();
 
     NetSendMediaPort tNetSendMediaPort;
@@ -138,31 +130,7 @@ bool CVideoLogic::OnAirDispRemoteResetVideoPos( WPARAM wparam, LPARAM lparam, bo
 
 bool CVideoLogic::OnShowVideo(WPARAM wParam, LPARAM lParam, bool& bHandle)
 {
-	/*if ( m_bDecod && m_bRecvStream )
-	{
-		bool bVis = WINDOW_MGR_PTR->IsWindowVisible(g_stcStrVideoDlg.c_str());
-		if ( bVis )
-		{   
-			HideDualView();
-		}
-		else
-		{ 
-			RestoreVedioWnd( );
-		}
-	}
-	else if ( !m_bDecod && m_bRecvStream )
-	{
-		m_cDecoder.StartPlay(); 
-		RestoreVedioWnd( );
-		m_bDecod = FALSE;
-
-	}
-	else
-	{             
-		PlayDual();
-	}*/
-    PlayDual();
-
+    InitParam();
     RestoreVedioWnd( );
     m_cDecoder.StartPlay(); 
 
@@ -179,7 +147,7 @@ bool CVideoLogic::HideDualView()
 
 	//m_cDecoder.SetWnd(NULL);
 	m_cDecoder.StopPlay();
-	m_bDecod = FALSE;
+	//m_bDecod = FALSE;
 	////ComInterface->SetReceiveDual( FALSE );
 
 	return true;
@@ -199,168 +167,6 @@ void CVideoLogic::RestoreVedioWnd()
 	m_cDecoder.AskKeyFrame( TRUE );
 
 	WINDOW_MGR_PTR->ShowWindow(g_stcStrVideoDlg.c_str());
-}
-
-bool CVideoLogic::OnDualRecvStateNotify(WPARAM wParam, LPARAM lParam, bool& bHandle)
-{
-	BOOL32 bDual = (BOOL32)wParam;
-	if ( !bDual )
-	{
-		TNotifyUI msg;
-		OnHideVideo(msg);       
-		m_bRecvStream = FALSE;
-	}
-	return S_OK;
-}
-
-bool CVideoLogic::OnStartRsp(WPARAM wParam, LPARAM lParam, bool& bHandle)
-{
-//如cnc显示出来，不再显示pad中的演示界面
-//     LPCSTR className = NULL;
-//     LPCSTR windName = _T("cnc");   
-//     HWND hWnd = ::FindWindow( className , windName );
-//     if ( IsWindow( hWnd ) )
-//     {
-//         if ( ::IsWindowVisible( hWnd ) )
-//         {
-// 			ComInterface->SetReceiveDual( FALSE );
-//             return S_OK;
-//         }         
-//     }
-
-    EmTPAddDualRcvResult emReVideo = (EmTPAddDualRcvResult)wParam;
-    EmTPAddDualRcvResult emReAudio = (EmTPAddDualRcvResult)lParam;
-    if( emReAudio != emAddDualRcvSucceed && emReVideo != emAddDualRcvSucceed )
-    {
-/*		
-		//全部失败的，不弹出演示窗口，在cnc中进行提示 2016-6-22 dyy lxg确认
-		switch( emReVideo )
-		{
-		case emAddDualRcvFailNoDual:
-			ShowMessageBox( "观看演示失败：当前未处于接收双流状态", &msgBoxArgs );
-			break;
-
-		case emAddDualRcvFailIllegalPos:
-			ShowMessageBox( "观看演示失败：通道非法", &msgBoxArgs );
-			break;
-
-		case emAddDualRcvFailNoPos:
-			ShowMessageBox( "观看演示失败：无空闲通道", &msgBoxArgs );
-			break;
-
-		case emAddDualRcvFailUnKown:
-			ShowMessageBox( "观看演示失败", &msgBoxArgs );
-
-		case emAddDualRcvFailStatusError:
-			ShowMessageBox( "观看演示失败：当前已处于双流状态", &msgBoxArgs );
-			break;
-		default:
-			ShowMessageBox( "观看演示失败", &msgBoxArgs );
-			break;
-		}
-		*/
-        ////ComInterface->SetReceiveDual( FALSE );
-        return S_FALSE;
-    }
-
-	
-    if ( emReAudio != emAddDualRcvSucceed )//因为没在上一步退出，如果进了此判断，则emReVideo为成功
-    {
-        switch( emReVideo )
-        {
-        case emAddDualRcvFailNoDual:
-			 ShowMessageBox( _T("接收演示音频失败：当前未处于接收双流状态") );
-             break;
-            
-        case emAddDualRcvFailIllegalPos:
-             ShowMessageBox( _T("接收演示音频失败：通道非法") );
-             break;
-
-        case emAddDualRcvFailNoPos:
-             ShowMessageBox( _T("接收演示音频失败：无空闲通道") );
-             break;
-
-        case emAddDualRcvFailUnKown:
-             ShowMessageBox( _T("接收演示音频失败") );
-             break;
-
-        case emAddDualRcvFailStatusError:
-            ShowMessageBox( _T("接收演示音频失败：当前已处于双流状态") );
-            break;
-        default:
-            ShowMessageBox( _T("接收演示音频失败") );
-			break;
-        }
-    }
-    else
-    {
-        //TTPCnMediaTransPort tMediaTranAddr = ComInterface->GetAudioTransAddr();
-        TTPCnMediaTransPort tMediaTranAddr;
-        m_cDecoder.SetAudioBackParam( tMediaTranAddr.m_tBackRtcpPort.GetPort(), 
-                                          tMediaTranAddr.m_tBackRtcpPort.GetIP() );  
-       
-    }
-        
-    if ( emReVideo != emAddDualRcvSucceed )
-    {
- /*       
-		//视频失败的，不弹出演示窗口，在cnc中进行提示 2016-6-22 dyy lxg确认
-		switch( emReVideo )
-        {
-        case emAddDualRcvFailNoDual:
-            ShowMessageBox( "接收演示视频失败：当前未处于接收双流状态", &msgBoxArgs );
-            break;
-            
-        case emAddDualRcvFailIllegalPos:
-             ShowMessageBox( "接收演示视频失败：通道非法", &msgBoxArgs );
-             break;
-
-        case emAddDualRcvFailNoPos:
-             ShowMessageBox( "接收演示视频失败：无空闲通道当前无演示", &msgBoxArgs );
-             break;
-
-        case emAddDualRcvFailUnKown:
-             ShowMessageBox( "接收演示视频失败", &msgBoxArgs );
-             break;
-
-        case emAddDualRcvFailStatusError:
-            ShowMessageBox( "观看演示失败：当前已处于双流状态", &msgBoxArgs );
-            break;
-        default:
-            ShowMessageBox( "观看演示失败", &msgBoxArgs );
-			break;
-        }
-		*/
-        ////ComInterface->SetReceiveDual( FALSE );
-		return S_FALSE;
-    }
-    else
-    {     
-		if ( m_bIsClkBtn )
-		{
-			WINDOW_MGR_PTR->ShowWindow(g_stcStrVideoDlg.c_str());
-            ////TTPCnMediaTransPort tMediaTranAddr = ComInterface->GetVedioTransAddr();
-			TTPCnMediaTransPort tMediaTranAddr;
-			m_cDecoder.SetVideoBackParam( tMediaTranAddr.m_tBackRtcpPort.GetPort(), 
-				tMediaTranAddr.m_tBackRtcpPort.GetIP() ); 
-			
-			Window *pVideo = WINDOW_MGR_PTR->GetWindow(g_stcStrVideoDlg.c_str());
-			
-			if ( pVideo != NULL )
-			{   
-				m_cDecoder.SetWnd( pVideo->GetHWND() ); 				
-			}
-			
-			m_cDecoder.StartPlay(); 
-			
-			m_bRecvStream = TRUE;
-			m_bDecod = TRUE;
-
-		}
-
-    }   
-
-    return S_OK;
 }
 
 LRESULT CVideoLogic::MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, bool& bHandled)
@@ -439,17 +245,9 @@ u8 CVideoLogic::GetDecVol()
 	return abyVol;
 }
 
-void CVideoLogic::PlayDual()
-{
-	InitParam();
-	////ComInterface->StartDualCodeStream( m_tVedioIpTransAddr, m_tAudioIpTransAddr );
-	m_bIsClkBtn = TRUE;
-}
-
 void CVideoLogic::InitParam()
 {
-	SET_ASK_MAIN_FRAME_FUN( &CVideoLogic::AskKeyFrame, CVideoLogic::GetSingletonPtr(), CVideoLogic )
-	//SET_ASK_MAIN_FRAME_FUN( &CDualViewLogic::AskKeyFrame, CDualViewLogic::GetSingletonPtr(), CDualViewLogic ) 
+	//SET_ASK_MAIN_FRAME_FUN( &CVideoLogic::AskKeyFrame, CVideoLogic::GetSingletonPtr(), CVideoLogic )
 
     m_cDecoder.SetVidDecZoomPolicy(EN_ZOOM_SCALE); //EN_ZOOM_CUT是全屏显示
 
@@ -461,33 +259,14 @@ void CVideoLogic::InitParam()
 	m_cDecoder.SetNetFeedbackVideoParam( /*tNetRSParam,*/ TRUE );
 	m_cDecoder.SetNetFeedbackAudioParam( /*tNetRSParam,*/ TRUE );
 
-	u32 dwLocalIP = inet_addr("127.0.0.1");
-    dwLocalIP = (ntohl)(dwLocalIP);
-	////ComInterface->GetLocalIP( dwLocalIP ); 
-
-#define RTP_LOCALVIDEO_PORT 10000
-	//2012.9.27  避免该端口已经被其他程序占用而导致无法正常接收到音视频码流问题  by yujinjin
-	u16 wVedioPort = GetIdlePort( dwLocalIP,RTP_LOCALVIDEO_PORT, RTP_LOCALVIDEO_PORT + 100 );
-	u16 wAudioPort = GetIdlePort( dwLocalIP,wVedioPort +2 , RTP_LOCALVIDEO_PORT + 200 );
-    //u16 wVedioPort = 7000;
-    //u16 wAudioPort = 7200;
-
-    m_tVedioIpTransAddr.m_tRtpPort.m_dwIP = htonl(dwLocalIP);
-	m_tVedioIpTransAddr.m_tRtpPort.m_wPort =  wVedioPort  ;
-
-
-	m_tAudioIpTransAddr.m_tRtpPort.m_dwIP = htonl(dwLocalIP);
-	m_tAudioIpTransAddr.m_tRtpPort.m_wPort = wAudioPort ;
-
-	//设置监控信息接受的端口和Ip地址
-	//m_cDecoder.SetInfo(m_tVedioIpTransAddr.m_tRtpPort.m_wPort, m_tAudioIpTransAddr.m_tRtpPort.m_wPort, dwLocalIP , dwLocalIP );
+	//设置视频接受的端口和Ip地址
     m_cDecoder.SetNetSendPara();
 	TMediaParam  tMonitorParam;
 	tMonitorParam.abyDynamicPayLoad[0] = MEDIA_TYPE_H264;
-	tMonitorParam.abyDynamicPayLoad[1] = MEDIA_TYPE_MP3;  //MEDIA_TYPE_AACLC
+	tMonitorParam.abyDynamicPayLoad[1] = MEDIA_TYPE_RED;  //MEDIA_TYPE_AACLC
 
 	tMonitorParam.abyRealType[0] = MEDIA_TYPE_H264;
-	tMonitorParam.abyRealType[1] = MEDIA_TYPE_MP3;  //MEDIA_TYPE_AACLC
+	tMonitorParam.abyRealType[1] = MEDIA_TYPE_RED;  //MEDIA_TYPE_AACLC
 
 	tMonitorParam.atEncryptKey[0].byLen = 0;
 	tMonitorParam.atEncryptKey[1].byLen = 0;
@@ -498,12 +277,12 @@ void CVideoLogic::InitParam()
 	TAudAACParam tAACParam;
 	tAACParam.dwChannel = 1;
 	tAACParam.dwSamplePerSecond = 32000;
-	//m_cDecoder.SetAACParam(tAACParam);
+	m_cDecoder.SetAACParam(tAACParam);
 
 	m_cDecoder.SetNetRcvParam();        //设置音视频网络接收参数
 
-	if ( 0 != m_tTpEncryptKey.byLen )
-	{
-		m_cDecoder.SetDecryptKey( (char*)m_tTpEncryptKey.byKey, m_tTpEncryptKey.byLen, AES_ENCRYPT_MODE/*m_tTpEncryptKey.emEncryType*/ );
-	}
+	//if ( 0 != m_tTpEncryptKey.byLen )
+	//{
+	//	m_cDecoder.SetDecryptKey( (char*)m_tTpEncryptKey.byKey, m_tTpEncryptKey.byLen, AES_ENCRYPT_MODE/*m_tTpEncryptKey.emEncryType*/ );
+	//}
 }

@@ -123,7 +123,8 @@ public:
     void SetNetSendPara(void);
 	void GetNetSendPara(NetSendPara &tNetSendPara);
 
-    void SetNetSndVideoParam();  //设置网络传送参数
+    void SetNetSndVideoParam();  //设置网络视频传送参数
+    void SetNetSndAudioParam();  //设置网络音频传送参数
 
 	u16 SetDeskSharedAudCallback(PDESKSHARECALLBACK pAudCallback, u32 dwContext);
 	u16	SetDeskSharedVidCallback(PDESKSHARECALLBACK pVidCallback, u32 dwContext);

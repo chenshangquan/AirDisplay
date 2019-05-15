@@ -51,7 +51,6 @@ CMainDlg::CMainDlg(CWnd* pParent /*=NULL*/)
     m_btnStart.SetTextColor(DEFAULT_FONT_COLOR, DEFAULT_FONT_COLOR, DEFAULT_FONT_COLOR, DEFAULT_FONT_COLOR);
     m_btnStart.SetImage(IDB_BTN_NORMAL, IDB_BTN_PRESS, IDB_BTN_HOVER, IDB_BTN_NORMAL);
     m_btnStart.ShowText(TRUE);
-    //m_btnStart.EnableWindow(FALSE);
 	
 	m_stTip.SetFont(13, g_achDefaultFont);
 	m_stTip.SetTextColor(DEFAULT_FONT_COLOR);
@@ -130,6 +129,7 @@ BOOL CMainDlg::OnInitDialog()
 
 	CBaseDlg::OnInitDialog();
 	InitUI();
+    m_btnStart.EnableWindow(FALSE);
 	SetWindowText(_T("AirDispLocal"));
 	
 	ShowConnectStatus(NET_STATUS_CONNECTING);
@@ -545,6 +545,7 @@ LRESULT CMainDlg::OnEnableViewQKShare( WPARAM wParam, LPARAM lParam )
     u32 dwRemoteVidPort = (u32)wParam;
     u32 dwRemoteAudPort = (u32)lParam;
     g_dlg->GetEncode().SetRemoteSendPort(dwRemoteVidPort, dwRemoteAudPort);
+    //g_dlg->GetEncode().SetNetSendPara();
 
     m_btnServerCnt.EnableWindow(FALSE);
     m_btnStart.EnableWindow(TRUE);

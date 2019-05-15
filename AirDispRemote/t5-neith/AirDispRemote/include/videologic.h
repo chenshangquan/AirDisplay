@@ -39,12 +39,9 @@ protected:
     bool OnAirDispRemoteMediaPort( WPARAM wparam, LPARAM lparam, bool& bHandle );
 	bool OnAirDispRemoteResetVideoPos( WPARAM wparam, LPARAM lparam, bool& bHandle );
 
-	//双流响应
     bool OnShowVideo(WPARAM wParam, LPARAM lParam, bool& bHandle);
 	bool HideDualView();
 	void RestoreVedioWnd();
-	bool OnDualRecvStateNotify(WPARAM wParam, LPARAM lParam, bool& bHandle);
-	bool OnStartRsp(WPARAM wParam, LPARAM lParam, bool& bHandle);
 	LRESULT MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, bool& bHandled);
 	bool OnDualCodeEnCryptKeyNty(WPARAM wParam, LPARAM lParam, bool& bHandle);
 public:
@@ -55,28 +52,16 @@ public:
 	u8 GetDecVol();
 	APP_DECLARE_MSG_MAP()
 private:
-	//开始/停止 观看双流演示
-	void PlayDual();
-
 	void InitParam();
 
 private:
 	CDecoder  m_cDecoder;
-	TTPCnMediaTransPort		m_tVedioIpTransAddr;
-	TTPCnMediaTransPort		m_tAudioIpTransAddr;
 
+    //BOOL32 m_bRecvStream;
+    //BOOL32 m_bDecod;
 
-	static String m_wndVedio;     //用于显示vedio的wnd
-
-	static String m_strSchmFullScreen;  //全屏方案
-
-	static String m_strSchmHideScreen;  //隐藏方案
-
-	BOOL32 m_bRecvStream;
-	BOOL32 m_bDecod;
-
-	BOOL32 m_bFullScreen;
-	BOOL32 m_bIsClkBtn;          //用于标志是否是点了tpad收看演示按钮才收到的回复消息
+    //BOOL32 m_bFullScreen;
+	//BOOL32 m_bIsClkBtn;          //用于标志是否是点了tpad收看演示按钮才收到的回复消息
 	TTpEncryptKey m_tTpEncryptKey;
 
 };

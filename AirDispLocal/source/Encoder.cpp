@@ -135,7 +135,7 @@ void CEncoder::StopVideo()
 void CEncoder::PlayAudio()
 {
     StopAudio();
-
+#if 1
 	if(CODEC_NO_ERROR != m_pcEncoder->StartAudioEnc())//开始声音解码
 	{
         SendError();
@@ -145,11 +145,26 @@ void CEncoder::PlayAudio()
 	{
         SendError();
 	}
+#else
+    if(CODEC_NO_ERROR != m_pcEncoder->StartAudioEnc())//开始声音解码
+    {
+        SendError();
+    }
+
+    if(CODEC_NO_ERROR != m_pcEncoder->StartAudioCap())//开始桌面音频共享
+    {
+        SendError();
+    }
+#endif
 }
 
 void CEncoder::StopAudio()
 {
+#if 1
 	m_pcEncoder->StopDeskSharedAud();
+#else
+    m_pcEncoder->StopAudioCap();
+#endif
 	m_pcEncoder->StopAudioEnc();
 }
 
@@ -195,6 +210,20 @@ void CEncoder::SetRemoteSendPort(u32 dwRemoteVidPort, u32 dwRemoteAudPort)
 }
 
 void CEncoder::SetNetSendPara(void)
+{
+    SetNetSndVideoParam();
+    SetNetSndAudioParam();
+
+    return;
+}
+
+void CEncoder::GetNetSendPara(NetSendPara &tNetSendPara)
+{
+	tNetSendPara = m_tNetSendPara;
+	return;
+}
+
+void CEncoder::SetNetSndVideoParam()
 {
     u32 dwSendRemotePort = m_tNetSendPara.m_dwRemoteVidPort;
     u32 dwSendLocalPort  = m_tNetSendPara.m_dwLocalVidPort;
@@ -250,51 +279,52 @@ void CEncoder::SetNetSendPara(void)
     return;
 }
 
-void CEncoder::GetNetSendPara(NetSendPara &tNetSendPara)
+void CEncoder::SetNetSndAudioParam()
 {
-	tNetSendPara = m_tNetSendPara;
-	return;
-}
+    u32 dwSendRemotePort = m_tNetSendPara.m_dwRemoteAudPort;
+    u32 dwSendLocalPort  = m_tNetSendPara.m_dwLocalAudPort;
 
-void CEncoder::SetNetSndVideoParam()
-{
-    s8* pSendLocalIP  = (s8*)SEND_LACAL_IP;
-    s8* pSendRemoteIP = (s8*)SEND_REMOTE_IP;
-    u32 dwSendRemotePort = VID_SND_REMOTE_PORT;
-    u32 dwSendLocalPort  = VID_SND_LOCAL_PORT;
+    in_addr inaddrLocal;
+    inaddrLocal.s_addr = m_tNetSendPara.m_dwLocalIP;
+    s8* pSendLocalIP  = inet_ntoa(inaddrLocal);
+    s8 achLocalIP[16] = {0};
+    strcpy(achLocalIP, pSendLocalIP);
 
-    TMnetNetParam tVidNetSndParam;
-    memset( &tVidNetSndParam, 0, sizeof(tVidNetSndParam) );
-    tVidNetSndParam.m_byRemoteNum = 1;
-    OSP_SET_NETADDR_PORT(&tVidNetSndParam.m_tLocalNet.tRTPAddr, AF_INET, dwSendLocalPort);
-    OSP_SET_NETADDR_PORT(&tVidNetSndParam.m_tLocalNet.tRTCPAddr, AF_INET, dwSendLocalPort + 1);
-    OSP_SET_NETADDR_ADDR_STR(&tVidNetSndParam.m_tLocalNet.tRTPAddr, AF_INET, pSendLocalIP);
-    OSP_SET_NETADDR_ADDR_STR(&tVidNetSndParam.m_tLocalNet.tRTCPAddr, AF_INET, pSendLocalIP);
+    in_addr inaddrRemote;
+    inaddrRemote.s_addr = m_tNetSendPara.m_dwRemoteIP;
+    s8* pSendRemoteIP  = inet_ntoa(inaddrRemote);
+    s8 achRemoteIP[16] = {0};
+    strcpy(achRemoteIP, pSendRemoteIP);
 
-    OSP_SET_NETADDR_PORT(&tVidNetSndParam.m_tRemoteNet[0].tRTPAddr, AF_INET, dwSendRemotePort);
-    OSP_SET_NETADDR_PORT(&tVidNetSndParam.m_tRemoteNet[0].tRTCPAddr, AF_INET, dwSendRemotePort + 1);
-    OSP_SET_NETADDR_ADDR_STR(&(tVidNetSndParam.m_tRemoteNet[0].tRTPAddr), AF_INET, pSendRemoteIP);
-    OSP_SET_NETADDR_ADDR_STR(&(tVidNetSndParam.m_tRemoteNet[0].tRTCPAddr), AF_INET, pSendRemoteIP);
+    TMnetNetParam tAudNetSndParam;
+    memset( &tAudNetSndParam, 0, sizeof(tAudNetSndParam) );
+    tAudNetSndParam.m_byRemoteNum = 1;
+    OSP_SET_NETADDR_PORT(&tAudNetSndParam.m_tLocalNet.tRTPAddr, AF_INET, dwSendLocalPort);
+    OSP_SET_NETADDR_PORT(&tAudNetSndParam.m_tLocalNet.tRTCPAddr, AF_INET, dwSendLocalPort + 1);
+    OSP_SET_NETADDR_ADDR_STR(&tAudNetSndParam.m_tLocalNet.tRTPAddr, AF_INET, achLocalIP);
+    OSP_SET_NETADDR_ADDR_STR(&tAudNetSndParam.m_tLocalNet.tRTCPAddr, AF_INET, achLocalIP);
 
-    u16 wRet = m_pcEncoder->SetNetSndVideoParam(&tVidNetSndParam);
+    OSP_SET_NETADDR_PORT(&tAudNetSndParam.m_tRemoteNet[0].tRTPAddr, AF_INET, dwSendRemotePort);
+    OSP_SET_NETADDR_PORT(&tAudNetSndParam.m_tRemoteNet[0].tRTCPAddr, AF_INET, dwSendRemotePort + 1);
+    OSP_SET_NETADDR_ADDR_STR(&(tAudNetSndParam.m_tRemoteNet[0].tRTPAddr), AF_INET, achRemoteIP);
+    OSP_SET_NETADDR_ADDR_STR(&(tAudNetSndParam.m_tRemoteNet[0].tRTCPAddr), AF_INET, achRemoteIP);
+
+    u16 wRet = 0;
+    wRet = m_pcEncoder->SetNetSndAudioParam(&tAudNetSndParam);
     if (wRet != 0)
     {
         PRINTMSG("something\r\n");
-        //printf("CKdvEncoder::SetNetSndVideoParam() failed. wRet=%d \n", wRet);
         //test_exit(EXIT_FAILURE);
-    }
-    wRet = m_pcEncoder->SetVideoActivePT(MEDIA_TYPE_H264,MEDIA_TYPE_H264);
-    if (wRet != 0)
-    {
-        //printf("CKdvEncoder::SetVideoActivePT() failed. wRet=%d \n", wRet);
+        return;
     }
 
-    wRet = m_pcEncoder->StartSendVideo();
-    if (wRet != 0)
-    {
-        //printf("CKdvEncoder::StartSendVideo() failed. wRet=%d \n", wRet);
-        //test_exit(EXIT_FAILURE);
-    }
+    u32 dwIndex = 0;
+    u32 dwDevNum = 0;
+    vector<TDevNameInfo> tOutDevList;
+    m_pcEncoder->SetAudNetSndBand(64 * 1.5);
+    m_pcEncoder->SetAudioActivePT( MEDIA_TYPE_RED, MEDIA_TYPE_RED);
+    m_pcEncoder->StartSendAudio();
+
     return;
 }
 
@@ -306,7 +336,6 @@ void CEncoder::SetVideoEncParam(TVideoEncParam tVideoEncParam)
 	}
 
 	m_pcEncoder->SetVideoEncParam(&tVideoEncParam);
-    //SetNetSndVideoParam();  //设置网络传送参数
     SetNetSendPara();
 }
 
